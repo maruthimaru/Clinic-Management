@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:id="@+id/itemBg"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginLeft="@dimen/size_10dp"
+                android:layout_marginBottom="@dimen/size_10dp">
+
+    <ImageView
+            android:id="@+id/imageViewLogo"
+            android:layout_width="@dimen/size_20dp"
+            android:layout_height="@dimen/size_20dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:src="@drawable/menu_balloon"/>
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:background="@color/float_transparent"
+            android:text="send"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/size_20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@id/imageViewLogo"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16dp"
+            android:layout_marginBottom="@dimen/size_5dp"
+    />
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="@color/blue"
+            android:visibility="gone"
+            android:layout_marginRight="@dimen/size_10dp"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:layout_below="@+id/title"/>
+
+</RelativeLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:id="@+id/relativeLayoutHome"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/real"
+        android:layout_width="@dimen/size_160dp"
+        android:layout_height="@dimen/size_130dp"
+        android:layout_margin="@dimen/size_20dp"
+        android:gravity="center"
+        android:paddingTop="@dimen/size_10dp"
+        android:paddingBottom="@dimen/size_20dp"
+        android:background="@drawable/box_shap">
+
+        <ImageView
+            android:id="@+id/imgdrawable"
+            android:layout_width="@dimen/size_64dp"
+            android:layout_height="@dimen/size_64dp"
+            android:src="@drawable/ic_ray_material"
+            android:layout_centerHorizontal="true"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/entries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HR"
+
+            android:layout_marginTop="@dimen/size_5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imgdrawable"
+            android:textStyle="bold"
+            android:textColor="@color/purple"
+            android:textSize="@dimen/size_16dp"
+            tools:ignore="NotSibling"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+
+
+

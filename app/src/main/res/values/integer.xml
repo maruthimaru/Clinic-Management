@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="ems">10</integer>
+    <integer name="int_50">50</integer>
+    <integer name="int_15">15</integer>
+    <integer name="int_2">2</integer>
+    <integer name="int_1">1</integer>
+    <integer name="int_3">3</integer>
+    <integer name="int_4">4</integer>
+    <integer name="int_10">10</integer>
+    <integer name="int_16">16</integer>
+    <integer name="int_35">35</integer>
+    <integer name="int_30">30</integer>
+    <integer name="int_40">40</integer>
+    <integer name="int_45">45</integer>
+    <integer name="int_60">60</integer>
+    <integer name="int_70">70</integer>
+    <integer name="int_80">80</integer>
+    <integer name="int_90">90</integer>
+    <integer name="int_100">100</integer>
+
+    <integer name="int_6">6</integer>
+    <integer name="int_14">14</integer>
+    <integer name="int_12">12</integer>
+    <integer name="int_13">13</integer>
+    <integer name="int_20">20</integer>
+    <integer name="int_25">25</integer>
+    <integer name="int_0_3">03</integer>
+
+
+</resources>

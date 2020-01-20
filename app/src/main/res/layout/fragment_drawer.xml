@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageViewStudentImg"
+        android:layout_width="@dimen/size_100dp"
+        android:layout_height="@dimen/size_100dp"
+        android:layout_marginLeft="@dimen/size_20dp"
+        android:minHeight="@dimen/size_100dp"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/size_20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewStudentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="@integer/int_50"
+            android:text="dsffsdfsdv"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size14dp" />
+
+        <TextView
+            android:id="@+id/textViewRollNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10dp"
+            android:text="dsffsdfsdv"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14dp" />
+
+        <TextView
+            android:id="@+id/textViewStagging"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10dp"
+            android:text="dsffsdfsdv"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14dp" />
+
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/drawerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingTop="@dimen/size_20dp" />
+
+</RelativeLayout>

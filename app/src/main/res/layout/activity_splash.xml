@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue"
+    tools:context=".activity.SplashActivity"
+    tools:ignore="MissingDefaultResource">
+
+    <ImageView
+        android:id="@+id/companyLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_hospital"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/companyLogo"
+    android:layout_centerHorizontal="true"
+    android:text="@string/welcome"
+    android:layout_marginTop="@dimen/size_10dp"
+    android:textStyle="bold"
+    android:textColor="@color/white"
+    android:textSize="@dimen/size_16dp"/>
+
+</RelativeLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/framelay"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/choose_your_login"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_14dp"/>
+
+    <ImageView
+        android:id="@+id/admin_image"
+        android:layout_width="@dimen/size_70dp"
+        android:layout_height="@dimen/size_70dp"
+        android:src="@drawable/ic_admin"
+        android:layout_below="@+id/text"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_marginLeft="@dimen/size_30dp"/>
+
+    <ImageView
+        android:id="@+id/doctor_image"
+        android:layout_width="@dimen/size_70dp"
+        android:layout_height="@dimen/size_70dp"
+        android:src="@drawable/ic_search_doctor"
+        android:layout_below="@+id/text"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/pacient_image"
+        android:layout_width="@dimen/size_70dp"
+        android:layout_height="@dimen/size_70dp"
+        android:src="@drawable/ic_cough"
+        android:layout_below="@+id/text"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:layout_marginRight="@dimen/size_20dp"/>
+
+    <TextView
+        android:id="@+id/admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/admin_image"
+        android:text="@string/admin"
+        android:textStyle="bold"
+        android:layout_marginLeft="@dimen/size_30dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16dp"/>
+    <TextView
+        android:id="@+id/doctor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/admin_image"
+        android:text="@string/doctor"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16dp"/>
+
+    <TextView
+        android:id="@+id/pacient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/admin_image"
+        android:text="@string/pacient"
+        android:textStyle="bold"
+        android:layout_marginRight="@dimen/size_30dp"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16dp"
+        android:layout_alignParentRight="true" />
+
+
+
+
+
+</RelativeLayout>

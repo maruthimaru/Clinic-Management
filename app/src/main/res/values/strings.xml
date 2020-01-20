@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Medical management</string>
+    <string name="welcome">Welcome</string>
+    <string name="choose_your_login">Choose Your Login</string>
+    <string name="admin">Admin</string>
+    <string name="doctor">Doctor</string>
+    <string name="pacient">Pacient</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirmation_message">Do you want to close the application?</string>
+    <string name="log_out">Are you sure want to logout the application?</string>
+    <string name="home">Home</string>
+    <string name="mydetails">My details</string>
+    <string name="book_appiontment">Book appiontment</string>
+    <string name="view_book">View book</string>
+    <string name="cancel_book">Cancel book</string>
+    <string name="serach_doctor">Serach doctor</string>
+    <string name="feedback">Feed back</string>
+    <string name="logout">Logout</string>
+</resources>
