@@ -10,6 +10,7 @@ import android.nfc.Tag
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.activity.LoginActivity
 import com.example.medicalmanagement.helper.pojo.NavDrawerItem
 import java.util.*
 
@@ -82,5 +83,14 @@ class CommonMethods{
         private var Date: String? = null
     }
 
+    fun Logoutscreen() {
+        val builder = AlertDialog.Builder(context)
+        builder.setMessage("Are you sure want to logout?")
+        builder.setPositiveButton("Yes") { dialog, id ->
+            intentFinish(context, LoginActivity::class.java)
+        }
+        builder.setNegativeButton("No") { dialog, id -> dialog.dismiss() }
+        builder.create().show()
+    }
 
 }

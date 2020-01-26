@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.adapter.AdminHomeAdapter
+import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.pojo.AdminHomeModel
 import java.util.ArrayList
 
@@ -24,6 +25,7 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
     internal lateinit var list: MutableList<AdminHomeModel>
     internal lateinit var homeAdapter: AdminHomeAdapter
     internal lateinit var recyclerView: RecyclerView
+    lateinit var commonMethods: CommonMethods
     private var lLayout: GridLayoutManager? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return  inflater.inflate(R.layout.fragment_admin_home, container, false)
@@ -38,6 +40,7 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
+        commonMethods= CommonMethods(activity!!)
 //        list.add(AdminHomeModel(R.drawable.ic_logo, getString(R.string.mydetails)))
 //        list.add(AdminHomeModel(R.drawable.ic_book_appiontment, getString(R.string.book_appiontment)))
 //        list.add(AdminHomeModel(R.drawable.ic_viewbook, getString(R.string.view_book)))
@@ -70,7 +73,8 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
             0 -> {
 
             }
-            -1 -> {
+            1 -> {
+                commonMethods.Logoutscreen()
             }
             2 -> {
             }

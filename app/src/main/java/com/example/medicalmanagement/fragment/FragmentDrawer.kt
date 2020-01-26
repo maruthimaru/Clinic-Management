@@ -37,7 +37,6 @@ class FragmentDrawer : Fragment() {
     lateinit var textViewStagging:TextView
 
 
-
    lateinit var rootView: View
 
     interface FragmentDrawerListener {
@@ -82,6 +81,14 @@ class FragmentDrawer : Fragment() {
                                 Log.e("onClick"," position "+i)
                                 drawerListener!!.onDrawerItemSelected(view,i)
                                 mDrawerLayout!!.closeDrawer(containerView)
+                                when(i){
+                                    0->{
+
+                                    }
+                                    1->{
+                                        commonClass.Logoutscreen()
+                                    }
+                                }
                             }
                             override fun onLongClick(view: View?, i: Int) {
 
@@ -125,15 +132,10 @@ class FragmentDrawer : Fragment() {
         toolbar.setNavigationOnClickListener {
             mDrawerLayout!!.openDrawer(Gravity.START)
             //if Home Button pressed hide the soft input
-            commonClass.hideKeyboard()
+//            commonClass.hideKeyboard()
             activity!!.invalidateOptionsMenu()
         }
 
     }
-
-
-
-
-
 
 }

@@ -4,7 +4,7 @@
     <string name="choose_your_login">Choose Your Login</string>
     <string name="admin">Admin</string>
     <string name="doctor">Doctor</string>
-    <string name="pacient">Pacient</string>
+    <string name="pacient">Patient</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="confirmation">Confirmation</string>
@@ -17,7 +17,7 @@
     <string name="book_appiontment">Book appiontment</string>
     <string name="view_book">View book</string>
     <string name="cancel_book">Cancel book</string>
-    <string name="serach_doctor">Serach doctor</string>
+    <string name="serach_doctor">Search doctor</string>
     <string name="feedback">Feed back</string>
     <string name="logout">Logout</string>
 </resources>
