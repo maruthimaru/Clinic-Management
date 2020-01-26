@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextViewww">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:focusable">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textSize">@dimen/size_10dp</item>
+        <item name="android:maxLength">@integer/int_50</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/hint_color</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+    </style>
 </resources>

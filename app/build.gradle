@@ -52,6 +52,7 @@ dependencies {
     //circular image view
     implementation 'com.jackandphantom.android:circularimageview:1.2.0'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
+    implementation 'com.google.android.material:material:1.0.0'
 
 
 }

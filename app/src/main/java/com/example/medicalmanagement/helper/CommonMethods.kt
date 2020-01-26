@@ -5,13 +5,18 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.nfc.Tag
+import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.activity.LoginActivity
 import com.example.medicalmanagement.helper.pojo.NavDrawerItem
+import java.io.ByteArrayOutputStream
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CommonMethods{
@@ -25,6 +30,50 @@ class CommonMethods{
     /* Context is converted to Activity.*/
     fun convertActivity(context: Context): Activity {
         return context as Activity
+    }
+    //convert byte[] to base64
+    fun getBaseImage(image: ByteArray): String {
+        return Base64.encodeToString(image,
+                Base64.NO_WRAP)
+
+    }
+    fun getdate(time: String, input: String, outTime: String): String? {
+
+        var inputFormat = SimpleDateFormat(input)
+        val outputFormat = SimpleDateFormat(outTime)
+        var date: Date? = null
+        var str: String? = null
+        var finalDate: Date? = null
+        try {
+            date = inputFormat.parse(time)
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+
+            finalDate = Date(calendar.timeInMillis)
+            str = outputFormat.format(finalDate)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            inputFormat = SimpleDateFormat(outTime)
+            try {
+                date = inputFormat.parse(time)
+                val calendar = Calendar.getInstance()
+                calendar.time = date
+                finalDate = Date(calendar.timeInMillis)
+                str = outputFormat.format(finalDate)
+            } catch (e1: ParseException) {
+                e1.printStackTrace()
+            }
+        }
+
+        return str
+    }
+
+    // convert from bitmap to byte array
+    @Throws(Exception::class)
+    fun getBytes(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
     }
 
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="int_5">5</integer>
     <integer name="ems">10</integer>
     <integer name="int_50">50</integer>
+    <integer name="int_150">150</integer>
     <integer name="int_15">15</integer>
     <integer name="int_2">2</integer>
     <integer name="int_1">1</integer>
@@ -18,14 +20,16 @@
     <integer name="int_80">80</integer>
     <integer name="int_90">90</integer>
     <integer name="int_100">100</integer>
-
+    <integer name="int_200">200</integer>
     <integer name="int_6">6</integer>
     <integer name="int_14">14</integer>
     <integer name="int_12">12</integer>
     <integer name="int_13">13</integer>
     <integer name="int_20">20</integer>
     <integer name="int_25">25</integer>
+    <integer name="int_18">18</integer>
     <integer name="int_0_3">03</integer>
+
 
 
 </resources>

@@ -71,7 +71,7 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
         when (position) {
 
             0 -> {
-
+            setfragment(DoctorFragment())
             }
             1 -> {
                 commonMethods.Logoutscreen()
@@ -92,4 +92,13 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
 
 
     }
+
+    private fun setfragment(_fragment: Fragment) {
+        val fm = fragmentManager
+        val fragmentTransaction = fm!!.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, _fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
 }
