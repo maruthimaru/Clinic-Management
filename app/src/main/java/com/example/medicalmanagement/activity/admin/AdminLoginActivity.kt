@@ -21,9 +21,13 @@ class AdminLoginActivity : AppCompatActivity(), View.OnClickListener  {
                     adminid!!.error = "please Enter company id"
                 }  else {
                     //getNotification()
-                    intent = Intent(this@AdminLoginActivity, AdminMainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    if(id=="1234") {
+                        intent = Intent(this@AdminLoginActivity, AdminMainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        adminid!!.error = "Invalid id"
+                    }
                 }
             }
         }
