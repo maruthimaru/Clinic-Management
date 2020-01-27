@@ -38,7 +38,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/mobile"
+                    android:id="@+id/Email_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -72,13 +72,12 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/pins"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="@integer/int_1"
                     android:background="@android:color/transparent"
-
-                    android:hint="enterpassword"
+                    android:hint="enter password"
                     android:inputType="textAutoComplete"
                     android:maxLength="@integer/int_15"
                     android:paddingLeft="@dimen/size_12dp"

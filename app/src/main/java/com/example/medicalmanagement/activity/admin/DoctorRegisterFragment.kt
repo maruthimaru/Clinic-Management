@@ -138,6 +138,8 @@ class DoctorRegisterFragment : Fragment() {
             Log.e("TAG", " doctorregister  " + list.size)
             Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
             doctorRegisterDao.insert(list)
+            Log.e(TAG,"insertdata " + doctorRegisterDao.getall().size)
+//            list = doctorRegisterDao.getall() as MutableList<DoctorRegisterTable>
             setfragment(DoctorFragment())
         }
 

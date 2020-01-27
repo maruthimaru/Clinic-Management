@@ -1,6 +1,7 @@
 package com.example.medicalmanagement.activity.admin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,22 +37,25 @@ class DoctorFragment : Fragment(),DoctorRegisterAdapter.ListAdapterListener {
         list=ArrayList()
         recycleview.setHasFixedSize(true)
         recycleview.layoutManager = LinearLayoutManager(activity)
+        list = doctorRegisterDao.getall() as MutableList<DoctorRegisterTable>
+        Log.e(TAG,"insertdataaaa " + doctorRegisterDao.getall().size)
         setAdapter(list)
-        doctorRegisterDao.getall()
+
+
+
         fab.setOnClickListener {
 
             setfragment(DoctorRegisterFragment())
         }
+
     }
+
     //set adapter
     private fun setAdapter(list: MutableList<DoctorRegisterTable>) {
 
         if (list.size > 0) {
             doctorRegisterAdapter = DoctorRegisterAdapter(list,activity!!,this)
             recycleview.adapter = doctorRegisterAdapter
-            doctorRegisterDao.getall()
-
-
         } else {
 
         }

@@ -14,4 +14,8 @@ interface DoctorRegisterDao{
         @Query("Select * from doctor_register_table")
   fun  getall():List<DoctorRegisterTable>
 
+    //login
+    @Query("select * from doctor_register_table where email=:email and password=:password")
+    fun login( email:String,password:String): DoctorRegisterTable
+
 }
