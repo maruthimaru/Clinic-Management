@@ -9,10 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.*
 import androidx.fragment.app.Fragment
 
 import com.example.medicalmanagement.R
@@ -61,8 +58,9 @@ class DoctorRegisterFragment : Fragment() {
         password=view.findViewById(R.id.password)
         appDatabase = AppDatabase.getDatabase(activity!!)
         bitmapUtility= BitmapUtility(activity!!)
-
+        commonMethods=CommonMethods(activity!!)
         doctorRegisterDao=appDatabase.doctorregisterdao()
+
         submit_btn.setOnClickListener { askAppointment() }
 
         companyphotoeditbtn.setOnClickListener {
@@ -138,7 +136,9 @@ class DoctorRegisterFragment : Fragment() {
 
             list.add(DoctorRegisterTable(Doctorname,Doctornumber,logo,Doctoremail,Special,Doctortime,Pass))
             Log.e("TAG", " doctorregister  " + list.size)
+            Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
             doctorRegisterDao.insert(list)
+            setfragment(DoctorFragment())
         }
 
     }

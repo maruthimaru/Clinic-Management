@@ -98,7 +98,7 @@ class BitmapUtility(private val context: Context) {
         //Get the bitmap image
         var bmp: Bitmap? = null
         try {
-            bmp = circleImage.circleBackgrounddd(context.resources.getColor(userColor), userName!!)
+//            bmp = circleImage.circleBackground(context.resources.getColor(userColor), userName!!)
         } catch (e: Exception) {
             e.printStackTrace()
         }

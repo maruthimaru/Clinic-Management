@@ -5,28 +5,55 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.adapter.DoctorRegisterAdapter
+import com.example.medicalmanagement.db.AppDatabase
+import com.example.medicalmanagement.db.dao.DoctorRegisterDao
+import com.example.medicalmanagement.db.table.DoctorRegisterTable
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class DoctorFragment : Fragment() {
+class DoctorFragment : Fragment(),DoctorRegisterAdapter.ListAdapterListener {
+    var TAG = DoctorFragment::class.java.simpleName.toString()
     lateinit var fab: FloatingActionButton
-
-
+    internal lateinit var recycleview: RecyclerView
+    lateinit var list: MutableList<DoctorRegisterTable>
+    lateinit var appDatabase: AppDatabase
+    lateinit var doctorRegisterDao: DoctorRegisterDao
+    lateinit var doctorRegisterAdapter: DoctorRegisterAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return  inflater.inflate(R.layout.fragment_doctor_details, container, false)
-
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fab = view.findViewById(R.id.fab)
-
+        recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
+        appDatabase = AppDatabase.getDatabase(activity!!)
+        doctorRegisterDao=appDatabase.doctorregisterdao()
+        list=ArrayList()
+        recycleview.setHasFixedSize(true)
+        recycleview.layoutManager = LinearLayoutManager(activity)
+        setAdapter(list)
+        doctorRegisterDao.getall()
         fab.setOnClickListener {
 
             setfragment(DoctorRegisterFragment())
+        }
+    }
+    //set adapter
+    private fun setAdapter(list: MutableList<DoctorRegisterTable>) {
+
+        if (list.size > 0) {
+            doctorRegisterAdapter = DoctorRegisterAdapter(list,activity!!,this)
+            recycleview.adapter = doctorRegisterAdapter
+            doctorRegisterDao.getall()
+
+
+        } else {
+
         }
     }
 
@@ -36,5 +63,9 @@ class DoctorFragment : Fragment() {
         fragmentTransaction.replace(R.id.frameLayout, _fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+    }
+
+    override fun onClickButton(position: Int, list: DoctorRegisterTable) {
+
     }
 }
