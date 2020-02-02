@@ -1,4 +1,4 @@
-package com.example.medicalmanagement.activity.admin
+package com.example.medicalmanagement.activity
 
 
 import android.app.AlertDialog
@@ -11,11 +11,16 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.medicalmanagement.R
-import com.example.medicalmanagement.activity.LoginActivity
-import com.example.medicalmanagement.fragment.FragmentDrawer
+import com.example.medicalmanagement.db.table.DoctorRegisterTable
+import com.example.medicalmanagement.fragment.admin.AdminHomeFragment
+import com.example.medicalmanagement.fragment.doctor.DoctorFragmentDrawer
+import com.example.medicalmanagement.fragment.doctor.DoctorProfileFragment
 import com.example.medicalmanagement.helper.CommonMethods
+import com.example.medicalmanagement.helper.Constants
 
-class AdminMainActivity : AppCompatActivity(), FragmentDrawer.FragmentDrawerListener  {
+class DoctorMainActivity : AppCompatActivity(), DoctorFragmentDrawer.FragmentDrawerListener  {
+
+lateinit var doctorDetails:DoctorRegisterTable
     override fun onDrawerItemSelected(view: View, position: Int) {
         displayPosition(position)
     }
@@ -77,35 +82,53 @@ class AdminMainActivity : AppCompatActivity(), FragmentDrawer.FragmentDrawerList
 //            }
         }
     }
-    private var drawerFragment: FragmentDrawer? = null
+    private var drawerDriverFragment: DoctorFragmentDrawer? = null
     lateinit var mToolbar: Toolbar
     var customdialog: CommonMethods? = null
     private var drawerLayout: DrawerLayout? = null
     var fragmentDrawerView: View? = null
-    internal var TAG = AdminMainActivity::class.java.simpleName
+    internal var TAG = DoctorMainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_frame)
+        setContentView(R.layout.activity_doctor_frame)
         customdialog = CommonMethods(this)
         mToolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(mToolbar)
         drawerLayout = findViewById(R.id.drawer_layout) as DrawerLayout
         supportActionBar!!.setHomeButtonEnabled(true)
         mToolbar.setNavigationIcon(R.drawable.ic_menunew)
-        setfragment(AdminHomeFragment())
+
+        var bundle =intent.extras
+
+        if (bundle!=null){
+            doctorDetails= bundle.getSerializable(Constants.doctorList) as DoctorRegisterTable
+        }
+        setfragment(DoctorProfileFragment(),doctorDetails)
 
 
-        drawerFragment =
-                supportFragmentManager.findFragmentById(R.id.fragment_navigation_drawer) as FragmentDrawer
-        drawerFragment!!.setUp(
+        drawerDriverFragment =
+                supportFragmentManager.findFragmentById(R.id.fragment_navigation_drawer) as DoctorFragmentDrawer
+        drawerDriverFragment!!.setUp(
                 R.id.fragment_navigation_drawer,
                 findViewById<DrawerLayout>(R.id.drawer_layout),
-                mToolbar
+                mToolbar,
+                doctorDetails
         )
-        drawerFragment!!.setDrawerListener(this)
+        drawerDriverFragment!!.setDrawerListener(this)
         drawerLayout!!.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
+    }
+
+    private fun setfragment(_fragment: Fragment,doctorList:DoctorRegisterTable) {
+        var bundle =Bundle()
+        bundle.putSerializable(Constants.doctorList,doctorList)
+        val fm = supportFragmentManager
+        _fragment.arguments=bundle
+        val fragmentTransaction = fm!!.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, _fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
     private fun setfragment(_fragment: Fragment) {
@@ -131,10 +154,10 @@ class AdminMainActivity : AppCompatActivity(), FragmentDrawer.FragmentDrawerList
             if (result.size > 0) {
                 for (model in result) {
                     Log.e(TAG, " onBackPressed model " + model::class.java)
-                    if (model::class.java.equals(AdminHomeFragment::class.java)) {
+                    if (model::class.java.equals(DoctorProfileFragment::class.java)) {
                         customdialog!!.showConfirmation()
-                    }else if (model::class.java.equals(AdminHomeFragment::class.java)) {
-                        setfragment(AdminHomeFragment())
+                    }else if (model::class.java.equals(DoctorProfileFragment::class.java)) {
+                        setfragment(DoctorProfileFragment())
                     }else{
                         supportFragmentManager.popBackStackImmediate()
                     }
@@ -159,7 +182,7 @@ class AdminMainActivity : AppCompatActivity(), FragmentDrawer.FragmentDrawerList
         AlertDialog.Builder(CommonMethods.context).setTitle(CommonMethods.context.getString(R.string.confirmation))
                 .setMessage(CommonMethods.context.getString(R.string.log_out))
                 .setPositiveButton(CommonMethods.context.getString(R.string.yes)) { _, _ ->
-                    intent = Intent(this@AdminMainActivity, LoginActivity::class.java)
+                    intent = Intent(this@DoctorMainActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

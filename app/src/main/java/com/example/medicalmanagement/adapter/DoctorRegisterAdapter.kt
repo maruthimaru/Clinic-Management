@@ -2,6 +2,7 @@ package com.example.medicalmanagement.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,7 @@ import com.example.medicalmanagement.helper.Constants
 
 import java.util.ArrayList
 
-class DoctorRegisterAdapter(private var listItems: List<DoctorRegisterTable>, private val context: Context,
+class DoctorRegisterAdapter(private var listItems: ArrayList<DoctorRegisterTable>, private val context: Context,
                             private val mListener: ListAdapterListener) : RecyclerView.Adapter<DoctorRegisterAdapter.ViewHolder>() {
 
     private val TAG = "IOMreport"
@@ -29,7 +30,7 @@ class DoctorRegisterAdapter(private var listItems: List<DoctorRegisterTable>, pr
     internal var appDatabase: AppDatabase
     init {
         commonMethods = CommonMethods(context)
-        this.srchlist = listItems as MutableList<DoctorRegisterTable>
+        this.srchlist = listItems
         appDatabase = AppDatabase.getDatabase(context)
     }
 
@@ -46,7 +47,7 @@ class DoctorRegisterAdapter(private var listItems: List<DoctorRegisterTable>, pr
 
 //            commonMethods.loadImageSquare(context, viewHolder.image, url,R.drawable.ic_iom_list)
 
-        viewHolder.doctortime.text=commonMethods.getdate(list.time!!, Constants.HHMM,Constants.hhmmaa)
+        viewHolder.doctortime.text=list.time!!
         viewHolder.doctor_mail.text=list.email
             viewHolder.Doctor_Name.text=list.name
         viewHolder.specialist.text=list.specialist
@@ -59,6 +60,14 @@ class DoctorRegisterAdapter(private var listItems: List<DoctorRegisterTable>, pr
                 mListener.onClickButton(position, list)
             }
         }
+        viewHolder.delete.setOnClickListener {
+            mListener.onClickButton(position, list)
+        }
+    }
+
+    fun removeItem(positon:Int){
+        listItems.removeAt(positon)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
@@ -72,6 +81,7 @@ class DoctorRegisterAdapter(private var listItems: List<DoctorRegisterTable>, pr
         lateinit var specialist:TextView
         lateinit var doctortime:TextView
         internal  var relativeLayout: CardView
+        lateinit var delete:ImageView
         init {
             Doctor_Name=itemView.findViewById(R.id.Doctor_Name)
             doctor_number=itemView.findViewById(R.id.doctor_number)
@@ -79,6 +89,7 @@ class DoctorRegisterAdapter(private var listItems: List<DoctorRegisterTable>, pr
             specialist=itemView.findViewById(R.id.specialist)
             doctortime=itemView.findViewById(R.id.doctortime)
             relativeLayout=itemView.findViewById(R.id.real)
+            delete=itemView.findViewById(R.id.delete)
 
         }
     }

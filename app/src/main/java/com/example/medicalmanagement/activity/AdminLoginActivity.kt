@@ -1,4 +1,4 @@
-package com.example.medicalmanagement.activity.admin
+package com.example.medicalmanagement.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

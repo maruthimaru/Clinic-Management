@@ -9,7 +9,7 @@ import com.example.medicalmanagement.db.table.DoctorRegisterTable
 
 
 @Database(
-        entities = [DoctorRegisterTable::class],version = 1,exportSchema = false)
+        entities = [DoctorRegisterTable::class],version = 2,exportSchema = false)
 
 abstract class AppDatabase:RoomDatabase(){
     abstract fun doctorregisterdao(): DoctorRegisterDao

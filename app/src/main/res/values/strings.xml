@@ -18,6 +18,7 @@
     <string name="view_book">View book</string>
     <string name="cancel_book">Cancel book</string>
     <string name="serach_doctor">Search doctor</string>
+    <string name="add_doctor">Add doctor</string>
     <string name="feedback">Feed back</string>
     <string name="logout">Logout</string>
 </resources>

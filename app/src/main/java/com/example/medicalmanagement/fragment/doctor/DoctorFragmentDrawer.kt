@@ -1,4 +1,4 @@
-package com.example.medicalmanagement.fragment
+package com.example.medicalmanagement.fragment.doctor
 
 import android.os.Bundle
 import android.util.Log
@@ -16,15 +16,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.db.AppDatabase
+import com.example.medicalmanagement.db.dao.DoctorRegisterDao
+import com.example.medicalmanagement.db.table.DoctorRegisterTable
 import com.example.medicalmanagement.helper.CommonMethods
+import com.example.medicalmanagement.helper.Constants
 import com.example.medicalmanagement.helper.NavigationDrawerAdapter
 import com.example.medicalmanagement.helper.RecyclerTouchListener
 import com.example.medicalmanagement.helper.pojo.NavDrawerItem
 
-class FragmentDrawer : Fragment() {
+class DoctorFragmentDrawer : Fragment() {
 
 
-    val TAG=FragmentDrawer::class.java.simpleName
+    private lateinit var doctorDetails: DoctorRegisterTable
+    val TAG= DoctorFragmentDrawer::class.java.simpleName
     lateinit var recyclerView:RecyclerView
     private var mDrawerToggle: ActionBarDrawerToggle? = null
     private var mDrawerLayout: DrawerLayout? = null
@@ -35,6 +40,8 @@ class FragmentDrawer : Fragment() {
     lateinit var textViewStudentName:TextView
     lateinit var textViewRollNo:TextView
     lateinit var textViewStagging:TextView
+    lateinit var appDatabase: AppDatabase
+    lateinit var doctorRegisterDao: DoctorRegisterDao
 
 
    lateinit var rootView: View
@@ -61,6 +68,8 @@ class FragmentDrawer : Fragment() {
         textViewRollNo=view.findViewById(R.id.textViewRollNo)
         textViewStagging=view.findViewById(R.id.textViewStagging)
         commonClass= CommonMethods(activity!!)
+        appDatabase = AppDatabase.getDatabase(activity!!)
+        doctorRegisterDao=appDatabase.doctorregisterdao()
 
         val list:List<NavDrawerItem> = commonClass.getNavigationList()
 
@@ -83,7 +92,8 @@ class FragmentDrawer : Fragment() {
                                 mDrawerLayout!!.closeDrawer(containerView)
                                 when(i){
                                     0->{
-
+                                        var doctorDetails=doctorRegisterDao.login(doctorDetails.email!!,doctorDetails.password!!)
+                                        setfragment(DoctorProfileFragment(),doctorDetails)
                                     }
                                     1->{
                                         commonClass.Logoutscreen()
@@ -95,11 +105,28 @@ class FragmentDrawer : Fragment() {
                             }
                         })
         )
-
-
-
     }
-    fun setUp(fragmentId: Int, drawerLayout: DrawerLayout, toolbar: Toolbar) {
+
+    private fun setfragment(_fragment: Fragment,doctorList: DoctorRegisterTable) {
+        var bundle =Bundle()
+        bundle.putSerializable(Constants.doctorList,doctorList)
+        val fm = activity!!.supportFragmentManager
+        _fragment.arguments=bundle
+        val fragmentTransaction = fm!!.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, _fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    private fun setfragment(_fragment: Fragment) {
+        val fm = activity!!.supportFragmentManager
+        val fragmentTransaction = fm!!.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, _fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+    fun setUp(fragmentId: Int, drawerLayout: DrawerLayout, toolbar: Toolbar,doctorDetails:DoctorRegisterTable) {
+        this.doctorDetails=doctorDetails
         containerView = activity!!.findViewById(fragmentId)
         mDrawerLayout = drawerLayout
         mDrawerToggle = object :

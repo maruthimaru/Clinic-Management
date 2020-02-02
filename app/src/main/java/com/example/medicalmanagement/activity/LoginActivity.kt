@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import com.example.medicalmanagement.R
-import com.example.medicalmanagement.activity.admin.AdminLoginActivity
 import com.example.medicalmanagement.helper.CommonMethods
 
 class LoginActivity : AppCompatActivity() {
@@ -31,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
         doctor_image.setOnClickListener{
             val intent = Intent(this, DoctorLoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
         pacient_image.setOnClickListener{
             val intent = Intent(this, PacientLoginActivity::class.java)

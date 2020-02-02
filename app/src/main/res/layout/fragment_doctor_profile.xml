@@ -156,6 +156,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_14dp"
             android:padding="@dimen/size_3dp"
+            android:maxLength="@integer/int_10"
             android:background="@drawable/bordergray"
             android:inputType="textAutoComplete"
             android:hint="Enter doctor time"/>
@@ -187,15 +188,13 @@
             android:paddingLeft="@dimen/size_10dp"
             android:paddingRight="@dimen/size_10dp">
 
-
-
             <Button
                 android:id="@+id/submit_btn"
                 android:layout_width="@dimen/size_100dp"
                 android:layout_height="@dimen/size_40dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/buttonboxshapeandbackg1"
-                android:text="Submit"
+                android:text="Update"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_14dp"
                 android:textStyle="bold"

@@ -24,6 +24,7 @@ class Constants {
     companion object {
 
 
+        val doctorList: String="DoctorDetails"
         val transport: String="transport"
         val in_person: String="in_person"
         val driverDetails: String = "driver_details"

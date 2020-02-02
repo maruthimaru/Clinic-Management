@@ -20,8 +20,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.PacientLoginActivity"></activity>
         <activity android:name=".activity.DoctorLoginActivity" />
-        <activity android:name=".activity.admin.AdminLoginActivity" />
-        <activity android:name=".activity.admin.AdminMainActivity"/>
+        <activity android:name=".activity.AdminLoginActivity" />
+        <activity android:name=".activity.AdminMainActivity"/>
 
         <meta-data
             android:name="android.support.FILE_PROVIDER_PATHS"
@@ -35,6 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.DoctorMainActivity" />
     </application>
 
 </manifest>

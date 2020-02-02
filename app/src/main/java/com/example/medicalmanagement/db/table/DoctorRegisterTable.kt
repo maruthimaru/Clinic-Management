@@ -9,12 +9,17 @@ import java.io.Serializable
 
 @Entity(tableName = "doctor_register_table")
 class DoctorRegisterTable: Serializable{
+
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @SerializedName("id")
+    @Expose
+    var id:Int?=null
+
     @SerializedName("name")
     @Expose
     var name: String? = null
 
-    @PrimaryKey
-    @NonNull
     @SerializedName("phone")
     @Expose
     var phone: String? = null

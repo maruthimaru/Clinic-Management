@@ -1,4 +1,4 @@
-package com.example.medicalmanagement.activity.admin
+package com.example.medicalmanagement.fragment.admin
 
 import android.content.ContentValues
 import android.os.Bundle
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.activity.AdminMainActivity
 import com.example.medicalmanagement.adapter.AdminHomeAdapter
 import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.pojo.AdminHomeModel
@@ -45,7 +46,7 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
 //        list.add(AdminHomeModel(R.drawable.ic_book_appiontment, getString(R.string.book_appiontment)))
 //        list.add(AdminHomeModel(R.drawable.ic_viewbook, getString(R.string.view_book)))
 //        list.add(AdminHomeModel(R.drawable.ic_cancel_book, getString(R.string.cancel_book)))
-        list.add(AdminHomeModel(R.drawable.ic_search_doctor, getString(R.string.serach_doctor)))
+        list.add(AdminHomeModel(R.drawable.ic_search_doctor, getString(R.string.add_doctor)))
 //        list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.feedback)))
         list.add(AdminHomeModel(R.drawable.ic_logout, getString(R.string.logout)))
 

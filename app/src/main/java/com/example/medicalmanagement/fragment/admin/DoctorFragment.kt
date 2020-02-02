@@ -1,5 +1,6 @@
-package com.example.medicalmanagement.activity.admin
+package com.example.medicalmanagement.fragment.admin
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.activity.LoginActivity
 import com.example.medicalmanagement.adapter.DoctorRegisterAdapter
 import com.example.medicalmanagement.db.AppDatabase
 import com.example.medicalmanagement.db.dao.DoctorRegisterDao
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
+import com.example.medicalmanagement.helper.CommonMethods
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DoctorFragment : Fragment(),DoctorRegisterAdapter.ListAdapterListener {
@@ -39,7 +42,7 @@ class DoctorFragment : Fragment(),DoctorRegisterAdapter.ListAdapterListener {
         recycleview.layoutManager = LinearLayoutManager(activity)
         list = doctorRegisterDao.getall() as MutableList<DoctorRegisterTable>
         Log.e(TAG,"insertdataaaa " + doctorRegisterDao.getall().size)
-        setAdapter(list)
+        setAdapter(list as ArrayList<DoctorRegisterTable>)
 
 
 
@@ -51,7 +54,7 @@ class DoctorFragment : Fragment(),DoctorRegisterAdapter.ListAdapterListener {
     }
 
     //set adapter
-    private fun setAdapter(list: MutableList<DoctorRegisterTable>) {
+    private fun setAdapter(list: ArrayList<DoctorRegisterTable>) {
 
         if (list.size > 0) {
             doctorRegisterAdapter = DoctorRegisterAdapter(list,activity!!,this)
@@ -70,6 +73,16 @@ class DoctorFragment : Fragment(),DoctorRegisterAdapter.ListAdapterListener {
     }
 
     override fun onClickButton(position: Int, list: DoctorRegisterTable) {
+
+        val builder = AlertDialog.Builder(CommonMethods.context)
+        builder.setMessage("Are you sure want to Delete?")
+        builder.setPositiveButton("Yes") { dialog, id ->
+            doctorRegisterDao.delete(list.id!!)
+            doctorRegisterAdapter.removeItem(position)
+        }
+        builder.setNegativeButton("No") { dialog, id -> dialog.dismiss() }
+        builder.create().show()
+
 
     }
 }

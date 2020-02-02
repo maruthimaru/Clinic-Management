@@ -11,6 +11,8 @@ import android.nfc.Tag
 import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.activity.LoginActivity
 import com.example.medicalmanagement.helper.pojo.NavDrawerItem
@@ -140,6 +142,13 @@ class CommonMethods{
         }
         builder.setNegativeButton("No") { dialog, id -> dialog.dismiss() }
         builder.create().show()
+    }
+
+    fun loadImage(imageByteArray:ByteArray,rowImageView:ImageView){
+        Glide.with(context)
+                .load(imageByteArray)
+                .placeholder(R.drawable.company_image)
+                .into(rowImageView);
     }
 
 }

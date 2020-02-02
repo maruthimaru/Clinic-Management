@@ -1,52 +1,55 @@
-package com.example.medicalmanagement.activity.admin
+package com.example.medicalmanagement.fragment.doctor
+
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.db.AppDatabase
 import com.example.medicalmanagement.db.dao.DoctorRegisterDao
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
+import com.example.medicalmanagement.fragment.admin.DoctorFragment
 import com.example.medicalmanagement.helper.BitmapUtility
 import com.example.medicalmanagement.helper.CommonMethods
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.medicalmanagement.helper.Constants
 import java.io.IOException
 
+class DoctorProfileFragment :Fragment(){
 
-class DoctorRegisterFragment : Fragment() {
-    private val TAG: String=DoctorRegisterFragment::class.java.simpleName
+    private lateinit var doctorDetails: DoctorRegisterTable
+    private val TAG: String=DoctorProfileFragment::class.java.simpleName
     internal var list=ArrayList<DoctorRegisterTable>()
     private var phtobitmap: Bitmap?=null
     lateinit var companyimage: ImageView
     internal lateinit var companyphotoeditbtn: ImageButton
-    lateinit var doctorname:EditText
-    lateinit var doctornumber:EditText
+    lateinit var doctorname: EditText
+    lateinit var doctornumber: EditText
     lateinit var submit_btn: Button
-    lateinit var doctoremail:EditText
-    lateinit var specialist:EditText
-    lateinit var doctortime:EditText
-    lateinit var password:EditText
+    lateinit var doctoremail: EditText
+    lateinit var specialist: EditText
+    lateinit var doctortime: EditText
+    lateinit var password: EditText
     lateinit var appDatabase: AppDatabase
     lateinit var doctorRegisterDao: DoctorRegisterDao
-    lateinit var bitmapUtility:BitmapUtility
+    lateinit var bitmapUtility: BitmapUtility
     internal lateinit var commonMethods: CommonMethods
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return  inflater.inflate(R.layout.fragment_doctor_register_, container, false)
+        return inflater.inflate(R.layout.fragment_doctor_profile,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         companyimage=view.findViewById(R.id.companyImg)
         companyphotoeditbtn=view.findViewById(R.id.imageButton2)
         doctorname=view.findViewById(R.id.doctorname)
@@ -62,6 +65,19 @@ class DoctorRegisterFragment : Fragment() {
         doctorRegisterDao=appDatabase.doctorregisterdao()
 
         submit_btn.setOnClickListener { askAppointment() }
+
+        var bundle =arguments
+        if (bundle!=null){
+            doctorDetails= bundle.getSerializable(Constants.doctorList) as DoctorRegisterTable
+            var image= Base64.decode(doctorDetails.image, Base64.DEFAULT);
+            commonMethods.loadImage(image,companyimage)
+            doctorname.setText(doctorDetails.name)
+            doctornumber.setText(doctorDetails.phone)
+            doctoremail.setText(doctorDetails.email)
+            specialist.setText(doctorDetails.specialist)
+            doctortime.setText(doctorDetails.time)
+            password.setText(doctorDetails.password)
+        }
 
         companyphotoeditbtn.setOnClickListener {
             // setup the alert builder
@@ -95,6 +111,7 @@ class DoctorRegisterFragment : Fragment() {
 
         }
     }
+
     private fun askAppointment(){
         val Doctorname=doctorname.text.toString()
         val Doctornumber=doctornumber.text.toString()
@@ -133,14 +150,15 @@ class DoctorRegisterFragment : Fragment() {
             } else {
                 logo = commonMethods.getBaseImage(commonMethods.getBytes((companyimage.drawable as BitmapDrawable).bitmap))
             }
-
-            list.add(DoctorRegisterTable(Doctorname,Doctornumber,logo,Doctoremail,Special,Doctortime,Pass))
-            Log.e("TAG", " doctorregister  " + list.size)
-            Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
-            doctorRegisterDao.insert(list)
-            Log.e(TAG,"insertdata " + doctorRegisterDao.getall().size)
-//            list = doctorRegisterDao.getall() as MutableList<DoctorRegisterTable>
-            setfragment(DoctorFragment())
+            doctorDetails.email=Doctoremail
+            doctorDetails.password=Pass
+            doctorDetails.time=Doctortime
+            doctorDetails.specialist=Special
+            doctorDetails.phone=Doctornumber
+            doctorDetails.name=Doctorname
+            doctorDetails.image=logo
+            doctorRegisterDao.update(doctorDetails)
+            Toast.makeText(activity!!,"Update successfully", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -213,12 +231,4 @@ class DoctorRegisterFragment : Fragment() {
     }
 
 
-
-    private fun setfragment(_fragment: Fragment) {
-        val fm = fragmentManager
-        val fragmentTransaction = fm!!.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayout, _fragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-    }
 }

@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:layout_width="@dimen/size_250dp"
-       android:name="com.example.medicalmanagement.fragment.admin.FragmentDrawer"
+       android:name="com.example.medicalmanagement.fragment.doctor.DoctorFragmentDrawer"
         android:layout_height="match_parent"
         android:layout_gravity="left"
         app:layout="@layout/fragment_drawer"

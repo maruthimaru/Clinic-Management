@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:background="@color/white"
-    tools:context=".activity.admin.AdminLoginActivity">
+    tools:context=".activity.AdminLoginActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardviewlayout"

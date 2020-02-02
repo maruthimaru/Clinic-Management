@@ -57,22 +57,16 @@
                 android:text="Email"
                 android:layout_alignParentLeft="true" />
 
-            <TextView
-                android:id="@+id/status"
+            <ImageView
+                android:id="@+id/delete"
                 style="@style/TextViewww"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="@dimen/size_5dp"
                 android:layout_marginRight="@dimen/size_10dp"
-                android:background="@color/colorI"
-
                 android:paddingRight="@dimen/size_5dp"
-
                 android:paddingLeft="@dimen/size_5dp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/size_10dp"
-                android:textStyle="bold"
-                android:visibility="gone"
+                android:src="@drawable/ic_delete"
+                android:visibility="visible"
                 android:layout_alignParentRight="true" />
 
             <TextView
