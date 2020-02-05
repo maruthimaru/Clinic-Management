@@ -1,4 +1,6 @@
 package com.example.medicalmanagement.fragment.admin
+
+import android.R.attr
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
@@ -18,6 +20,11 @@ import com.example.medicalmanagement.db.dao.DoctorRegisterDao
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
 import com.example.medicalmanagement.helper.BitmapUtility
 import com.example.medicalmanagement.helper.CommonMethods
+import droidninja.filepicker.FilePickerBuilder
+import droidninja.filepicker.FilePickerConst
+import droidninja.filepicker.FilePickerConst.KEY_SELECTED_DOCS
+import java.io.BufferedReader
+import java.io.FileReader
 import java.io.IOException
 
 
@@ -30,6 +37,7 @@ class DoctorRegisterFragment : Fragment() {
     lateinit var doctorname:EditText
     lateinit var doctornumber:EditText
     lateinit var submit_btn: Button
+    lateinit var upload_btn: Button
     lateinit var doctoremail:EditText
     lateinit var specialist:EditText
     lateinit var doctortime:EditText
@@ -38,6 +46,8 @@ class DoctorRegisterFragment : Fragment() {
     lateinit var doctorRegisterDao: DoctorRegisterDao
     lateinit var bitmapUtility:BitmapUtility
     internal lateinit var commonMethods: CommonMethods
+    val requestcode = 3
+    var docPaths=ArrayList<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return  inflater.inflate(R.layout.fragment_doctor_register_, container, false)
@@ -54,12 +64,35 @@ class DoctorRegisterFragment : Fragment() {
         specialist=view.findViewById(R.id.specialist)
         doctortime=view.findViewById(R.id.doctortime)
         password=view.findViewById(R.id.password)
+        upload_btn=view.findViewById(R.id.upload_btn)
         appDatabase = AppDatabase.getDatabase(activity!!)
         bitmapUtility= BitmapUtility(activity!!)
         commonMethods=CommonMethods(activity!!)
         doctorRegisterDao=appDatabase.doctorregisterdao()
 
         submit_btn.setOnClickListener { askAppointment() }
+
+        upload_btn.setOnClickListener {
+//            val fileintent = Intent(Intent.ACTION_GET_CONTENT)
+//            fileintent.setType("*/*");
+//            try {
+//                startActivityForResult(fileintent, requestcode)
+//            } catch (e: ActivityNotFoundException) {
+//                Log.e(TAG,e.localizedMessage)
+//            }
+
+            val zips = arrayOf(".zip", ".rar")
+            val csvs = arrayOf(".csv")
+
+            FilePickerBuilder.instance.setMaxCount(5)
+                    .setSelectedFiles(docPaths)
+                    .addFileSupport("ZIP",zips)
+                    .addFileSupport("CSV",csvs)
+                    .setActivityTheme(R.style.LibAppTheme)
+                    .pickFile(this,FilePickerConst.REQUEST_CODE_DOC);
+
+
+        }
 
         companyphotoeditbtn.setOnClickListener {
             // setup the alert builder
@@ -185,6 +218,87 @@ class DoctorRegisterFragment : Fragment() {
                     Log.e("TAG", "select event for photo=$resultCode")
                 }
 //                Log.e("TAG", "select event for photo=$resultCode")
+            }
+            FilePickerConst.REQUEST_CODE_DOC->{
+
+
+                if (resultCode === Activity.RESULT_OK && attr.data != null) {
+                    docPaths = ArrayList()
+                    docPaths.addAll(data!!.getStringArrayListExtra(KEY_SELECTED_DOCS))
+                }
+
+//
+//                val selectedFileUri: Uri = data!!.getData()!!
+                Log.i(TAG, "selectedFileUri : ${docPaths[0]}")
+//                Log.i(TAG, "Selected File Path:${selectedFileUri.lastPathSegment}")
+//                val uri: Uri = data.data!!
+//                val file = File(uri.path) //create path from uri
+//
+//                val split: List<String> = file.getPath().split("home:") //split the path.
+//
+//                var selectedFilePath =  "" //assign it to a string(your choice).
+////                Log.i(TAG, "Selected File Path:$selectedFilePath")
+////
+//
+//                if ("content".equals(uri.scheme, ignoreCase = true)) {
+//                    val projection = arrayOf(MediaStore.Images.Media.DATA)
+//                    var cursor: Cursor? = null
+//                    try {
+//                        cursor = context!!.contentResolver.query(uri, projection, null, null, null)
+//                        val column_index: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//                        if (cursor.moveToFirst()) {
+//                            selectedFilePath= cursor.getString(column_index)
+//                        }
+//                    } catch (e: Exception) {
+//                        Log.e(TAG,e.localizedMessage)
+//                    }
+//                }
+//                if (selectedFilePath != null && !selectedFilePath.equals("")) {
+//                                    Log.e(TAG,"filepath : " +selectedFilePath)
+//                } else {
+//                    Toast.makeText(activity!!, "Cannot upload file to server", Toast.LENGTH_SHORT).show()
+//                }
+
+                val filepath: String = docPaths[0] //assign it to a string(your choice).
+                Log.e(TAG,"filepath : " +filepath)
+                try {
+                    if (resultCode == Activity.RESULT_OK) {
+                        try {
+
+                            val file = FileReader(filepath)
+                            Log.e(TAG,"file : " +file)
+                            val buffer = BufferedReader(file)
+                            var line = ""
+                            var iteration = 0
+                            while (buffer.readLine().also({ line = it }) != null) {
+                                if(iteration == 0) {
+                                    iteration++;
+                                    continue;
+                                }
+                                val str: ArrayList<String> = line.split(",") as ArrayList<String> // defining
+                                Log.e(TAG,"str : " +str)
+                                if ( str.size>0){
+//                                    Log.e(TAG,"list : " +str)
+                                    list.add( DoctorRegisterTable(str[1],str[2],str[3],str[4],str[5],str[6],str[7]))
+                                }
+                            }
+                            Log.e(TAG,"List size demo")
+                            Log.e(TAG,"List size ${list.size}")
+//                            doctorRegisterDao.insert(list)
+
+                        }catch (e:Exception){
+                            Log.e(TAG,e.localizedMessage)
+                            Log.e(TAG,"List size ${list.size}")
+                            doctorRegisterDao.insert(list)
+                        }
+                    }else{
+                        Toast.makeText(activity!!,"Only csv file allowed",Toast.LENGTH_LONG).show()
+                    }
+                }catch (e:Exception){
+                    Log.e(TAG,e.localizedMessage)
+                }
+
+
             }
         }
     }
