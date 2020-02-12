@@ -21,4 +21,6 @@
     <string name="add_doctor">Add doctor</string>
     <string name="feedback">Feed back</string>
     <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
+    <string name="appointment">Appointment</string>
 </resources>

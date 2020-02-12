@@ -25,6 +25,7 @@ class Constants {
 
 
         val doctorList: String="DoctorDetails"
+        val patientList: String="PatientDetails"
         val transport: String="transport"
         val in_person: String="in_person"
         val driverDetails: String = "driver_details"

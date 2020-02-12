@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/size_8dp">
+
+        <ImageView
+            android:id="@+id/companyImg"
+            android:layout_width="@dimen/size_80dp"
+            android:layout_height="@dimen/size_80dp"
+            android:layout_centerHorizontal="true"
+            android:minWidth="@dimen/size_80dp"
+            android:minHeight="@dimen/size_80dp"
+            app:srcCompat="@drawable/company_image"/>
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/companyImg"
+            android:layout_alignBottom="@+id/companyImg"
+            android:layout_marginRight="-5dp"
+            android:layout_marginBottom="-6dp"
+            android:background="@drawable/bg_circle1"
+            app:srcCompat="@drawable/ic_photo_camera_black_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+            android:layout_below="@+id/imageButton2"
+            tools:ignore="UnknownId">
+
+        <TextView
+            android:id="@+id/companytextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_3dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/size_14dp"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:text="Enter patient name" />
+        <EditText
+            android:id="@+id/doctorname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_14dp"
+            android:maxLength="@integer/int_150"
+            android:padding="@dimen/size_3dp"
+            android:background="@drawable/bordergray"
+            android:inputType="textPersonName"
+            android:hint="Enter patient name" />
+        <TextView
+            android:id="@+id/doctor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_3dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/size_14dp"
+            android:textStyle="bold"
+            android:text="Enter patient number" />
+        <EditText
+            android:id="@+id/doctornumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_14dp"
+            android:padding="@dimen/size_3dp"
+            android:maxLength="@integer/int_10"
+            android:background="@drawable/bordergray"
+            android:inputType="phone"
+            android:hint="Enter patient number" />
+        <TextView
+            android:id="@+id/companyemailtextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_3dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/size_14dp"
+            android:textStyle="bold"
+            android:text="Enter patient email" />
+        <EditText
+            android:id="@+id/doctoremail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_14dp"
+            android:padding="@dimen/size_3dp"
+            android:background="@drawable/bordergray"
+            android:inputType="textPersonName"
+            android:hint="Enter patient email" />
+        <TextView
+            android:id="@+id/companyaddresstextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_3dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/size_14dp"
+            android:textStyle="bold"
+            android:text="Enter Age" />
+        <EditText
+            android:id="@+id/specialist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="@integer/int_200"
+            android:textSize="@dimen/size_14dp"
+            android:padding="@dimen/size_3dp"
+            android:background="@drawable/bordergray"
+            android:inputType="textPostalAddress"
+            android:hint="Enter Age" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/uploadfiletextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="upload_new_logo" />
+            <EditText
+                android:id="@+id/fileeditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:layout_below="@+id/uploadfiletextView"
+                android:textSize="@dimen/size_12dp"
+                android:inputType="textFilter"
+                android:text="nochoosefile" />
+            <Button
+                android:id="@+id/filebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/uploadfiletextView"
+               android:layout_marginRight="@dimen/size_40dp"
+                android:layout_alignParentRight="true"
+                android:text="choosefile" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/finacialyeartotextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_3dp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:text="Enter password"
+            android:textSize="@dimen/size_14dp"/>
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_14dp"
+            android:maxLength="@integer/int_10"
+            android:padding="@dimen/size_3dp"
+            android:background="@drawable/bordergray"
+            android:inputType="textPassword"
+            android:hint="Enter password" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="@dimen/size_30dp"
+            android:paddingLeft="@dimen/size_10dp"
+            android:paddingRight="@dimen/size_10dp">
+
+            <Button
+                android:id="@+id/submit_btn"
+                android:layout_width="@dimen/size_100dp"
+                android:layout_height="@dimen/size_40dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/buttonboxshapeandbackg1"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_14dp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    </RelativeLayout>
+</ScrollView>

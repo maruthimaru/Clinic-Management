@@ -36,6 +36,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DoctorMainActivity" />
+        <activity android:name=".activity.PatientRegisterActivity" />
+        <activity android:name=".activity.PatientMainActivity" />
     </application>
 
 </manifest>
