@@ -32,21 +32,21 @@ class PatientRegisterTable: Serializable{
     @Expose
     var email: String? = null
 
-    @SerializedName("specialist")
+    @SerializedName("age")
     @Expose
-    var specialist: String? = null
+    var age: String? = null
 
     @SerializedName("password")
     @Expose
     var password: String? = null
 
 
-    constructor(name: String?, phone: String?, image: String?, email: String?, specialist: String?, password: String?) {
+    constructor(name: String?, phone: String?, image: String?, email: String?, age: String?, password: String?) {
         this.name = name
         this.phone = phone
         this.image = image
         this.email = email
-        this.specialist = specialist
+        this.age = age
         this.password = password
     }
 }

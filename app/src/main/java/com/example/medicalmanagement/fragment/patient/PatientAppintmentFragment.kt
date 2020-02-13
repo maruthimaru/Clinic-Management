@@ -1,0 +1,472 @@
+package com.example.medicalmanagement.fragment.patient
+
+import android.R.attr
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Base64
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
+import com.example.medicalmanagement.R
+import com.example.medicalmanagement.db.AppDatabase
+import com.example.medicalmanagement.db.dao.PatientRegisterDao
+import com.example.medicalmanagement.db.table.PatientAppointmentTable
+import com.example.medicalmanagement.db.table.PatientRegisterTable
+import com.example.medicalmanagement.helper.BitmapUtility
+import com.example.medicalmanagement.helper.CommonMethods
+import com.example.medicalmanagement.helper.Constants
+import com.example.medicalmanagement.helper.RecyclerTouchListener
+import com.example.medicalmanagement.helper.adapter.UploadimageAdapter
+import com.example.medicalmanagement.helper.pojo.ImagesModel
+import droidninja.filepicker.FilePickerBuilder
+import droidninja.filepicker.FilePickerConst
+import droidninja.filepicker.FilePickerConst.KEY_SELECTED_DOCS
+import id.zelory.compressor.Compressor
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+
+
+class PatientAppintmentFragment : Fragment() {
+    private lateinit var uploadimageAdapter: UploadimageAdapter
+    private lateinit var patientDetails: PatientAppointmentTable
+    private val TAG: String= PatientAppintmentFragment::class.java.simpleName
+    internal var list=ArrayList<PatientRegisterTable>()
+    private var phtobitmap: Bitmap?=null
+    lateinit var companyimage: ImageView
+    internal lateinit var companyphotoeditbtn: ImageButton
+    lateinit var doctorname:EditText
+    lateinit var doctornumber:EditText
+    lateinit var submit_btn: Button
+    lateinit var doctoremail:EditText
+    lateinit var specialist:EditText
+    lateinit var password:EditText
+    lateinit var appDatabase: AppDatabase
+    lateinit var patientRegisterDao: PatientRegisterDao
+    lateinit var bitmapUtility:BitmapUtility
+    internal lateinit var commonMethods: CommonMethods
+    val requestcode = 3
+
+    private val imgList=ArrayList<ImagesModel>()
+    private val imagelist = ArrayList<String>()
+    private val imagepath = ArrayList<String>()
+    private var mCurrentPhotoPath: String? = null
+    private val Document = 18
+    private var actualImage: File? = null
+    lateinit var docpic: TextView
+    lateinit var recyclerView_doc_img: RecyclerView
+    private var compressedImage: File? = null
+
+    var docPaths=ArrayList<String>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return  inflater.inflate(R.layout.fragment_patient_register_, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        companyimage=view.findViewById(R.id.companyImg)
+        companyphotoeditbtn=view.findViewById(R.id.imageButton2)
+        doctorname=view.findViewById(R.id.doctorname)
+        submit_btn = view.findViewById(R.id.submit_btn)
+        doctornumber=view.findViewById(R.id.doctornumber)
+        doctoremail=view.findViewById(R.id.doctoremail)
+        specialist=view.findViewById(R.id.specialist)
+        password=view.findViewById(R.id.password)
+        recyclerView_doc_img = view.findViewById(R.id.recyclerView_doc_img)
+        docpic = view.findViewById(R.id.docpic)
+        appDatabase = AppDatabase.getDatabase(activity!!)
+        bitmapUtility= BitmapUtility(activity!!)
+        commonMethods=CommonMethods(activity!!)
+        patientRegisterDao=appDatabase.patientRegisterDao()
+
+        var bundle =arguments
+        if (bundle!=null){
+            patientDetails= bundle.getSerializable(Constants.patientList) as PatientAppointmentTable
+//            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
+//            commonMethods.loadImage(image,companyimage)
+            doctorname.setText(patientDetails.pName)
+            doctornumber.setText(patientDetails.phone)
+            doctoremail.setText(patientDetails.email)
+            specialist.setText(patientDetails.age)
+        }
+
+        submit_btn.setOnClickListener { askAppointment() }
+
+        companyphotoeditbtn.setOnClickListener {
+            // setup the alert builder
+            val builder = android.app.AlertDialog.Builder(activity)
+            builder.setTitle("Choose an photo")
+            // add a list
+            val photo = arrayOf("Take Photo", "Select Photo", "Cancel")
+            builder.setItems(photo) { dialog, which ->
+                when (which) {
+                    0 // Take Photo
+                    -> {
+                        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        startActivityForResult(takePicture, 0)//zero can be replaced with any action code
+                        Log.e("TAG", "Click event for photo=$which")
+                    }
+                    1 // Select Photo
+                    -> {
+                        val pickPhoto = Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        startActivityForResult(pickPhoto, 1)//one can be replaced with any action code
+                        Log.e("TAG", "Click event for photo=$which")
+                    }
+
+                    2 // Cancel
+                    -> builder.setCancelable(true)
+                }
+            }
+            // create and show the alert dialog
+            val dialog = builder.create()
+            dialog.show()
+
+        }
+
+        recyclerView_doc_img.setHasFixedSize(true)
+        recyclerView_doc_img.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView_doc_img.itemAnimator = DefaultItemAnimator()
+        recyclerView_doc_img.addOnItemTouchListener(RecyclerTouchListener(activity!!, recyclerView_doc_img, object : RecyclerTouchListener.ClickListener {
+            override fun onClick(view: View, position: Int) {}
+
+            override fun onLongClick(view: View?, position: Int) {
+                if (imagelist.isEmpty() || imagepath.isEmpty()) {
+                    val t = Toast.makeText(activity, "You Can't delete this Photo!!!", Toast.LENGTH_SHORT)
+                    t.setGravity(17, 0, 0)
+                    t.show()
+                    return
+                }
+                val builder = AlertDialog.Builder(activity)
+                builder.setMessage(resources.getString(R.string.sureDelete))
+                builder.setPositiveButton("OK") { dialog, id ->
+                    list.removeAt(position)
+                    imagelist.removeAt(position)
+                    val path = imagepath.get(position)
+                    val fdelete = File(path)
+                    if (fdelete.exists()) {
+                        if (fdelete.delete()) {
+                            imagepath.removeAt(position)
+                            uploadimageAdapter.notifyDataSetChanged()
+                        } else {
+                        }
+                    }
+                }
+                builder.setNegativeButton("Cancel") { dialog, id -> dialog.dismiss() }
+                builder.create().show()
+            }
+        }))
+
+        docpic.setOnClickListener {
+            //                imgmsg.setVisibility( View.VISIBLE );
+            recyclerView_doc_img.visibility = View.VISIBLE
+            val intent = Intent("android.media.action.IMAGE_CAPTURE")
+            actualImage = createImageFile()
+            if (actualImage != null) {
+                val photoURI: Uri
+                if (Build.VERSION.SDK_INT > 19) {
+                    photoURI = FileProvider.getUriForFile(activity!!, "com.scoto.visitormanagent.fileprovider", actualImage!!)
+                } else {
+                    photoURI = Uri.fromFile(actualImage)
+                }
+                intent.putExtra("output", photoURI)
+                startActivityForResult(intent, Document)
+            }
+        }
+
+    }
+
+    private fun createImageFile(): File {
+        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera")
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdir()
+        }
+        val image = File(mediaStorageDir, "IMG_" + SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) + ".jpg")
+        mCurrentPhotoPath = image.absolutePath
+        return image
+    }
+
+
+    private fun askAppointment(){
+        val Doctorname=doctorname.text.toString()
+        val Doctornumber=doctornumber.text.toString()
+        val Doctoremail=doctoremail.text.toString()
+        val Special=specialist.text.toString()
+        val Pass=password.text.toString()
+        var logo = ""
+
+        if (Doctorname.isNullOrEmpty()){
+            doctorname.requestFocus()
+            doctorname.error = "Please enter the doctor name"
+        }
+        else if (Doctornumber.isNullOrEmpty()){
+            doctornumber.requestFocus()
+            doctornumber.error = "Please enter the doctor number"
+        }
+        else if (Doctoremail.isNullOrEmpty()){
+            doctoremail.requestFocus()
+            doctoremail.error = "Please enter the doctor email"
+        }
+        else if (Special.isNullOrEmpty()){
+            specialist.requestFocus()
+            specialist.error = "Please enter the specialist"
+        }
+        else if (Pass.isNullOrEmpty()){
+            password.requestFocus()
+            password.error = "Please enter the password"
+        }else{
+            if (phtobitmap != null) {
+                logo = bitmapUtility.getStringImage(phtobitmap!!)
+            } else {
+                logo = commonMethods.getBaseImage(commonMethods.getBytes((companyimage.drawable as BitmapDrawable).bitmap))
+            }
+
+            patientDetails.email=Doctoremail
+            patientDetails.age=Special
+            patientDetails.phone=Doctornumber
+
+            Log.e("TAG", " doctorregister  " + list.size)
+            Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
+//            patientRegisterDao.update(patientDetails)
+            Log.e(TAG,"insertdata " + patientRegisterDao.getall().size)
+//            list = patientRegisterDao.getall() as MutableList<DoctorRegisterTable>
+
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            0 -> {
+                if (resultCode == Activity.RESULT_OK && requestCode == 0) {
+
+                    val bp = data!!.extras!!.get("data") as Bitmap
+                    val resized = Bitmap.createScaledBitmap(bp, 100, 100, true)
+                    phtobitmap=resized
+                    val conv_bm = getRoundedRectBitmap(resized, 100)
+                    companyimage.setImageBitmap(null)
+                    companyimage.setImageBitmap(conv_bm)
+                    Log.e("TAG", "select event for photo=$resultCode")
+                    //customerImg=getBytes(conv_bm);
+                }
+//                Log.e("TAG", "select event for photo=$resultCode")
+            }
+            18 -> {
+                handleBigCameraPhoto()
+            }
+            1 -> {
+                if (resultCode == Activity.RESULT_OK && requestCode == 1) {
+
+
+                    var bm: Bitmap? = null
+                    if (data != null) {
+                        try {
+                            bm = MediaStore.Images.Media.getBitmap(context!!.contentResolver, data.data)
+                            //                            int size=Math.min(bm.getWidth(),bm.getHeight());
+                            //                            int x=(bm.getWidth()-size)/2;
+                            //                            int y=(bm.getHeight()-size)/2;
+                            //                            Bitmap bitmap=Bitmap.createBitmap(bm,x,y,size,size);
+                            //                            Log.e("bitmap_Resul "," = "+ bitmap);
+
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                    }
+                    val resized = Bitmap.createScaledBitmap(bm!!, 100, 100, true)
+                    val conv_bm = getRoundedRectBitmap(resized, 100)
+                    companyimage.setImageBitmap(conv_bm)
+                    Log.e("TAG", "select event for photo=$resultCode")
+                }
+//                Log.e("TAG", "select event for photo=$resultCode")
+            }
+            FilePickerConst.REQUEST_CODE_DOC->{
+
+
+                if (resultCode === Activity.RESULT_OK && attr.data != null) {
+                    docPaths = ArrayList()
+                    docPaths.addAll(data!!.getStringArrayListExtra(KEY_SELECTED_DOCS))
+                }
+
+//
+//                val selectedFileUri: Uri = data!!.getData()!!
+                Log.i(TAG, "selectedFileUri : ${docPaths[0]}")
+//                Log.i(TAG, "Selected File Path:${selectedFileUri.lastPathSegment}")
+//                val uri: Uri = data.data!!
+//                val file = File(uri.path) //create path from uri
+//
+//                val split: List<String> = file.getPath().split("home:") //split the path.
+//
+//                var selectedFilePath =  "" //assign it to a string(your choice).
+////                Log.i(TAG, "Selected File Path:$selectedFilePath")
+////
+//
+//                if ("content".equals(uri.scheme, ignoreCase = true)) {
+//                    val projection = arrayOf(MediaStore.Images.Media.DATA)
+//                    var cursor: Cursor? = null
+//                    try {
+//                        cursor = context!!.contentResolver.query(uri, projection, null, null, null)
+//                        val column_index: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//                        if (cursor.moveToFirst()) {
+//                            selectedFilePath= cursor.getString(column_index)
+//                        }
+//                    } catch (e: Exception) {
+//                        Log.e(TAG,e.localizedMessage)
+//                    }
+//                }
+//                if (selectedFilePath != null && !selectedFilePath.equals("")) {
+//                                    Log.e(TAG,"filepath : " +selectedFilePath)
+//                } else {
+//                    Toast.makeText(activity!!, "Cannot upload file to server", Toast.LENGTH_SHORT).show()
+//                }
+
+                val filepath: String = docPaths[0] //assign it to a string(your choice).
+                Log.e(TAG,"filepath : " +filepath)
+                try {
+                    if (resultCode == Activity.RESULT_OK) {
+                        try {
+
+                            val file = FileReader(filepath)
+                            Log.e(TAG,"file : " +file)
+                            val buffer = BufferedReader(file)
+                            var line = ""
+                            var iteration = 0
+                            while (buffer.readLine().also({ line = it }) != null) {
+                                if(iteration == 0) {
+                                    iteration++;
+                                    continue;
+                                }
+                                val str: ArrayList<String> = line.split(",") as ArrayList<String> // defining
+                                Log.e(TAG,"str : " +str)
+                                if ( str.size>0){
+//                                    Log.e(TAG,"list : " +str)
+//                                    list.add( PatientAppointmentTable(str[1],str[2],str[3],str[4],str[5],str[6],str[7]))
+                                }
+                            }
+                            Log.e(TAG,"List size demo")
+                            Log.e(TAG,"List size ${list.size}")
+//                            patientRegisterDao.insert(list)
+
+                        }catch (e:Exception){
+                            Log.e(TAG,e.localizedMessage)
+                            Log.e(TAG,"List size ${list.size}")
+                            patientRegisterDao.insert(list)
+                        }
+                    }else{
+                        Toast.makeText(activity!!,"Only csv file allowed",Toast.LENGTH_LONG).show()
+                    }
+                }catch (e:Exception){
+                    Log.e(TAG,e.localizedMessage)
+                }
+
+
+            }
+        }
+    }
+
+    private fun handleBigCameraPhoto() {
+        if (mCurrentPhotoPath != null) {
+            customCompressImage()
+            imagepath.add(mCurrentPhotoPath.toString())
+            Log.e(TAG, "handleBigCameraPhoto: path : " + mCurrentPhotoPath!!)
+            mCurrentPhotoPath = null
+        }
+    }
+
+    fun customCompressImage() {
+        if (actualImage != null) {
+            try {
+                compressedImage = Compressor(activity).setMaxWidth(540).setMaxHeight(500).setQuality(50).setCompressFormat(Bitmap.CompressFormat.JPEG).compressToFile(actualImage!!)
+                setCompressedImage()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    private fun setCompressedImage() {
+        val e: FileNotFoundException
+        var imagesModel: ImagesModel
+        val bitmap = BitmapFactory.decodeFile(compressedImage!!.absolutePath)
+        try {
+            val outputStream = FileOutputStream(actualImage!!)
+            val fileOutputStream: FileOutputStream
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            fileOutputStream = outputStream
+        } catch (e3: FileNotFoundException) {
+            e = e3
+            e.printStackTrace()
+            imagelist.add(bitmapUtility.getStringImage(bitmap))
+            imagesModel = ImagesModel()
+            imagesModel.bitmap = bitmap
+            imgList.add(imagesModel)
+            uploadimageAdapter = UploadimageAdapter(imgList, activity!!)
+            recyclerView_doc_img.adapter = uploadimageAdapter
+        }
+
+        imagelist.add(bitmapUtility.getStringImage(bitmap))
+        imagesModel = ImagesModel()
+        imagesModel.bitmap = bitmap
+        imgList.add(imagesModel)
+        //        Log.e(TAG, "setCompressedImage: Image List Size : "+list.size() );
+        if (imgList.size > 0) {
+            //            imgmsg.setVisibility( View.VISIBLE );
+            //            dottedview.setVisibility( View.GONE );
+            recyclerView_doc_img.visibility = View.VISIBLE
+        }
+        uploadimageAdapter = UploadimageAdapter(imgList, activity!!)
+        recyclerView_doc_img.adapter = uploadimageAdapter
+    }
+
+    private fun getRoundedRectBitmap(bp: Bitmap, i: Int): Bitmap? {
+
+        var result: Bitmap? = null
+        try {
+            result = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(result!!)
+            val color = -0xbdbdbe
+            val paint = Paint()
+            val rect = Rect(0, 0, 200, 200)
+            paint.isAntiAlias = true
+            canvas.drawARGB(0, 0, 0, 0)
+            paint.color = color
+            canvas.drawCircle(50f, 50f, 50f, paint)
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+            canvas.drawBitmap(bp, rect, rect, paint)
+
+        } catch (e: NullPointerException) {
+        } catch (o: OutOfMemoryError) {
+        }
+        return result
+    }
+
+
+
+    private fun setfragment(_fragment: Fragment) {
+        val fm = fragmentManager
+        val fragmentTransaction = fm!!.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, _fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+}
