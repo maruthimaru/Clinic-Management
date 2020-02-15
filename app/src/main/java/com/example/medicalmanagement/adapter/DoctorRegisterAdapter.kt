@@ -47,7 +47,16 @@ class DoctorRegisterAdapter(private var listItems: ArrayList<DoctorRegisterTable
 
 //            commonMethods.loadImageSquare(context, viewHolder.image, url,R.drawable.ic_iom_list)
 
-        viewHolder.doctortime.text=list.time!!
+        var time=""
+        for ( timeModel in list.time!!){
+            if (time==""){
+                time=timeModel
+            }else{
+                time=time+","+timeModel
+            }
+        }
+        Log.e(TAG," time "+ time)
+        viewHolder.doctortime.text=time!!
         viewHolder.doctor_mail.text=list.email
             viewHolder.Doctor_Name.text=list.name
         viewHolder.specialist.text=list.specialist

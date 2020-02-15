@@ -13,11 +13,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.adapter.ScheduleDoctortimeAdapter
+import com.example.medicalmanagement.adapter.ScheduletimeAdapter
 import com.example.medicalmanagement.db.AppDatabase
 import com.example.medicalmanagement.db.dao.DoctorRegisterDao
+import com.example.medicalmanagement.db.dao.ScheduleTimeDao
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
+import com.example.medicalmanagement.db.table.ScheduleTime
 import com.example.medicalmanagement.helper.BitmapUtility
 import com.example.medicalmanagement.helper.CommonMethods
 import droidninja.filepicker.FilePickerBuilder
@@ -28,9 +35,11 @@ import java.io.FileReader
 import java.io.IOException
 
 
-class DoctorRegisterFragment : Fragment() {
+class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapterListener {
+    private lateinit var scheduletimeAdapter: ScheduleDoctortimeAdapter
     private val TAG: String=DoctorRegisterFragment::class.java.simpleName
     internal var list=ArrayList<DoctorRegisterTable>()
+    internal  var timeList=ArrayList<ScheduleTime>()
     private var phtobitmap: Bitmap?=null
     lateinit var companyimage: ImageView
     internal lateinit var companyphotoeditbtn: ImageButton
@@ -46,6 +55,8 @@ class DoctorRegisterFragment : Fragment() {
     lateinit var doctorRegisterDao: DoctorRegisterDao
     lateinit var bitmapUtility:BitmapUtility
     internal lateinit var commonMethods: CommonMethods
+    internal lateinit var recycleview: RecyclerView
+    lateinit var scheduleTimeDao: ScheduleTimeDao
     val requestcode = 3
     var docPaths=ArrayList<String>()
 
@@ -65,12 +76,16 @@ class DoctorRegisterFragment : Fragment() {
         doctortime=view.findViewById(R.id.doctortime)
         password=view.findViewById(R.id.password)
         upload_btn=view.findViewById(R.id.upload_btn)
+        recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
         appDatabase = AppDatabase.getDatabase(activity!!)
         bitmapUtility= BitmapUtility(activity!!)
         commonMethods=CommonMethods(activity!!)
         doctorRegisterDao=appDatabase.doctorregisterdao()
-
+        scheduleTimeDao=appDatabase.schudleTimeDao()
         submit_btn.setOnClickListener { askAppointment() }
+
+        recycleview.setHasFixedSize(true)
+        recycleview.layoutManager = GridLayoutManager(activity,4)
 
         upload_btn.setOnClickListener {
 //            val fileintent = Intent(Intent.ACTION_GET_CONTENT)
@@ -125,7 +140,19 @@ class DoctorRegisterFragment : Fragment() {
             dialog.show()
 
         }
+        timeList = scheduleTimeDao.getTime() as ArrayList<ScheduleTime>
+        setAdapter(timeList)
     }
+
+    //set adapter
+    private fun setAdapter(list: ArrayList<ScheduleTime>) {
+
+        if (list.size > 0) {
+            scheduletimeAdapter = ScheduleDoctortimeAdapter(list,activity!!,this)
+            recycleview.adapter = scheduletimeAdapter
+        }
+    }
+
     private fun askAppointment(){
         val Doctorname=doctorname.text.toString()
         val Doctornumber=doctornumber.text.toString()
@@ -134,6 +161,8 @@ class DoctorRegisterFragment : Fragment() {
         val Doctortime=doctortime.text.toString()
         val Pass=password.text.toString()
         var logo = ""
+
+        val timing=scheduletimeAdapter.getClickedStatus()
 
         if (Doctorname.isNullOrEmpty()){
             doctorname.requestFocus()
@@ -151,9 +180,10 @@ class DoctorRegisterFragment : Fragment() {
             specialist.requestFocus()
             specialist.error = "Please enter the specialist"
         }
-        else if (Doctortime.isNullOrEmpty()){
-            doctortime.requestFocus()
-            doctortime.error = "Please enter the doctor time"
+        else if (timing.size<=0){
+//            doctortime.requestFocus()
+//            doctortime.error = "Please select the doctor time"
+            Toast.makeText(activity!!,"Please select the doctor time",Toast.LENGTH_SHORT).show()
         }
         else if (Pass.isNullOrEmpty()){
             password.requestFocus()
@@ -165,7 +195,7 @@ class DoctorRegisterFragment : Fragment() {
                 logo = commonMethods.getBaseImage(commonMethods.getBytes((companyimage.drawable as BitmapDrawable).bitmap))
             }
 
-            list.add(DoctorRegisterTable(Doctorname,Doctornumber,logo,Doctoremail,Special,Doctortime,Pass))
+            list.add(DoctorRegisterTable(Doctorname,Doctornumber,logo,Doctoremail,Special, timing,Pass))
             Log.e("TAG", " doctorregister  " + list.size)
             Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
             doctorRegisterDao.insert(list)
@@ -279,7 +309,8 @@ class DoctorRegisterFragment : Fragment() {
                                 Log.e(TAG,"str : " +str)
                                 if ( str.size>0){
 //                                    Log.e(TAG,"list : " +str)
-                                    list.add( DoctorRegisterTable(str[1],str[2],str[3],str[4],str[5],str[6],str[7]))
+                                    val timing=str[6].split(",") as ArrayList<String>
+                                    list.add( DoctorRegisterTable(str[1],str[2],str[3],str[4],str[5],timing,str[7]))
                                 }
                             }
                             Log.e(TAG,"List size demo")
@@ -332,5 +363,9 @@ class DoctorRegisterFragment : Fragment() {
         fragmentTransaction.replace(R.id.frameLayout, _fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+    }
+
+    override fun onIemClick() {
+
     }
 }

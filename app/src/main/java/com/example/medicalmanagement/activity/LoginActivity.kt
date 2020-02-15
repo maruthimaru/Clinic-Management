@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
         pacient_image.setOnClickListener{
             val intent = Intent(this, PacientLoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

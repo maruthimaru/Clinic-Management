@@ -3,6 +3,8 @@ package com.example.medicalmanagement.db.table
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.medicalmanagement.db.dao.DoctorRegDataConversion
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -20,9 +22,10 @@ class PatientAppointmentTable: Serializable{
     @Expose
     var pName: String? = null
 
+    @TypeConverters(DoctorRegDataConversion::class)
     @SerializedName("imagelist")
     @Expose
-    var imagelist = ArrayList<String>()
+    var imagelist : List<String>?=null
 
     @SerializedName("phone")
     @Expose
@@ -48,7 +51,7 @@ class PatientAppointmentTable: Serializable{
     @Expose
     var specialist: String? = null
 
-    constructor(id: Int?, pName: String?, imagelist: ArrayList<String>, phone: String?, age: String?, email: String?, dId: String?, dName: String?, specialist: String?) {
+    constructor(id: Int?, pName: String?, imagelist: List<String>, phone: String?, age: String?, email: String?, dId: String?, dName: String?, specialist: String?) {
         this.id = id
         this.pName = pName
         this.imagelist = imagelist

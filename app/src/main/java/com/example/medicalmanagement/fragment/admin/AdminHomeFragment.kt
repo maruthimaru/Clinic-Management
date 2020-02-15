@@ -47,7 +47,7 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
 //        list.add(AdminHomeModel(R.drawable.ic_viewbook, getString(R.string.view_book)))
 //        list.add(AdminHomeModel(R.drawable.ic_cancel_book, getString(R.string.cancel_book)))
         list.add(AdminHomeModel(R.drawable.ic_search_doctor, getString(R.string.add_doctor)))
-//        list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.feedback)))
+        list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.timimg)))
         list.add(AdminHomeModel(R.drawable.ic_logout, getString(R.string.logout)))
 
 
@@ -75,9 +75,10 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
             setfragment(DoctorFragment())
             }
             1 -> {
-                commonMethods.Logoutscreen()
+                setfragment(ScheduleTimeFragment())
             }
             2 -> {
+                commonMethods.Logoutscreen()
             }
             3 -> {
             }

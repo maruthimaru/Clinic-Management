@@ -77,7 +77,7 @@ class PatientRegisterFragment : Fragment() {
             doctorname.setText(patientDetails.name)
             doctornumber.setText(patientDetails.phone)
             doctoremail.setText(patientDetails.email)
-            specialist.setText(patientDetails.specialist)
+            specialist.setText(patientDetails.age)
             password.setText(patientDetails.password)
         }
 
@@ -151,7 +151,7 @@ class PatientRegisterFragment : Fragment() {
 
             patientDetails.email=Doctoremail
             patientDetails.password=Pass
-            patientDetails.specialist=Special
+            patientDetails.age=Special
             patientDetails.phone=Doctornumber
             patientDetails.name=Doctorname
             patientDetails.image=logo

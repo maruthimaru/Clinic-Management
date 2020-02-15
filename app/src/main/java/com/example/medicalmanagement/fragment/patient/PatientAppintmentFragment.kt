@@ -53,9 +53,9 @@ class PatientAppintmentFragment : Fragment() {
     lateinit var companyimage: ImageView
     internal lateinit var companyphotoeditbtn: ImageButton
     lateinit var doctorname:EditText
-    lateinit var doctornumber:EditText
+    lateinit var doctornumber:TextView
     lateinit var submit_btn: Button
-    lateinit var doctoremail:EditText
+    lateinit var doctoremail:TextView
     lateinit var specialist:EditText
     lateinit var password:EditText
     lateinit var appDatabase: AppDatabase
@@ -77,7 +77,7 @@ class PatientAppintmentFragment : Fragment() {
     var docPaths=ArrayList<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return  inflater.inflate(R.layout.fragment_patient_register_, container, false)
+        return  inflater.inflate(R.layout.fragment_patient_appontment_, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,15 +98,15 @@ class PatientAppintmentFragment : Fragment() {
         patientRegisterDao=appDatabase.patientRegisterDao()
 
         var bundle =arguments
-        if (bundle!=null){
-            patientDetails= bundle.getSerializable(Constants.patientList) as PatientAppointmentTable
-//            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
-//            commonMethods.loadImage(image,companyimage)
-            doctorname.setText(patientDetails.pName)
-            doctornumber.setText(patientDetails.phone)
-            doctoremail.setText(patientDetails.email)
-            specialist.setText(patientDetails.age)
-        }
+//        if (bundle!=null){
+//            patientDetails= bundle.getSerializable(Constants.patientList) as PatientAppointmentTable
+////            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
+////            commonMethods.loadImage(image,companyimage)
+//            doctorname.setText(patientDetails.pName)
+//            doctornumber.setText(patientDetails.phone)
+//            doctoremail.setText(patientDetails.email)
+//            specialist.setText(patientDetails.age)
+//        }
 
         submit_btn.setOnClickListener { askAppointment() }
 
@@ -158,7 +158,7 @@ class PatientAppintmentFragment : Fragment() {
                 val builder = AlertDialog.Builder(activity)
                 builder.setMessage(resources.getString(R.string.sureDelete))
                 builder.setPositiveButton("OK") { dialog, id ->
-                    list.removeAt(position)
+                    imgList.removeAt(position)
                     imagelist.removeAt(position)
                     val path = imagepath.get(position)
                     val fdelete = File(path)
@@ -183,7 +183,7 @@ class PatientAppintmentFragment : Fragment() {
             if (actualImage != null) {
                 val photoURI: Uri
                 if (Build.VERSION.SDK_INT > 19) {
-                    photoURI = FileProvider.getUriForFile(activity!!, "com.scoto.visitormanagent.fileprovider", actualImage!!)
+                    photoURI = FileProvider.getUriForFile(activity!!, "com.example.medicalmanagement.fileprovider", actualImage!!)
                 } else {
                     photoURI = Uri.fromFile(actualImage)
                 }

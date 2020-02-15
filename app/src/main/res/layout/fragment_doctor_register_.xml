@@ -141,21 +141,14 @@
                 android:layout_alignParentRight="true"
                 android:text="choosefile" />
         </RelativeLayout>
-        <TextView
-            android:id="@+id/finacialyearformtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_3dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/size_14dp"
-            android:textStyle="bold"
-            android:text="Enter doctor time" />
+
         <EditText
             android:id="@+id/doctortime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_14dp"
             android:padding="@dimen/size_3dp"
+            android:visibility="gone"
             android:background="@drawable/bordergray"
             android:inputType="textAutoComplete"
             android:hint="Enter doctor time"/>
@@ -168,17 +161,37 @@
             android:textStyle="bold"
             android:text="Enter password"
             android:textSize="@dimen/size_14dp"/>
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/size_14dp"
-            android:maxLength="@integer/int_10"
-            android:padding="@dimen/size_3dp"
-            android:background="@drawable/bordergray"
-            android:inputType="date"
-            android:hint="Enter password" />
-        <LinearLayout
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bordergray"
+                android:hint="Enter password"
+                android:inputType="date"
+                android:maxLength="@integer/int_10"
+                android:padding="@dimen/size_3dp"
+                android:textSize="@dimen/size_14dp" />
+
+            <TextView
+                android:id="@+id/finacialyearformtextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_3dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/size_14dp"
+                android:textStyle="bold"
+                android:text="Select doctor time" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_2dp"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:layout_marginRight="@dimen/size_2dp"/>
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

@@ -1,8 +1,8 @@
 package com.example.medicalmanagement.db.table
 
 import androidx.annotation.NonNull
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.example.medicalmanagement.db.dao.DoctorRegDataConversion
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -13,39 +13,47 @@ class DoctorRegisterTable: Serializable{
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @SerializedName("id")
+    @ColumnInfo(name = "id")
     @Expose
     var id:Int?=null
 
     @SerializedName("name")
+    @ColumnInfo(name = "name")
     @Expose
     var name: String? = null
 
     @SerializedName("phone")
+    @ColumnInfo(name = "phone")
     @Expose
     var phone: String? = null
 
     @SerializedName("image")
+    @ColumnInfo(name = "image")
     @Expose
     var image: String? = null
 
     @SerializedName("email")
+    @ColumnInfo(name = "email")
     @Expose
     var email: String? = null
 
     @SerializedName("specialist")
+    @ColumnInfo(name = "specialist")
     @Expose
     var specialist: String? = null
 
+    @TypeConverters(DoctorRegDataConversion::class)
     @SerializedName("time")
-    @Expose
-    var time: String? = null
+    @ColumnInfo(name = "time")
+    var time: List<String>? = null
 
     @SerializedName("password")
+    @ColumnInfo(name = "password")
     @Expose
     var password: String? = null
 
 
-    constructor(name: String?, phone: String?, image: String?, email: String?, specialist: String?, time: String?, password: String?) {
+    constructor(name: String?, phone: String?, image: String?, email: String?, specialist: String?, time: List<String>?, password: String?) {
         this.name = name
         this.phone = phone
         this.image = image

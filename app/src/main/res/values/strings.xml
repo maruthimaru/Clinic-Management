@@ -24,4 +24,5 @@
     <string name="profile">Profile</string>
     <string name="appointment">Appointment</string>
     <string name="sureDelete">Are you sure want to delete?</string>
+    <string name="timimg">Timing</string>
 </resources>

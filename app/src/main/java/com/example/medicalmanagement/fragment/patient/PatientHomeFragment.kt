@@ -86,7 +86,8 @@ class PatientHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
             setfragment(PatientRegisterFragment(),patientDetails)
             }
             1 -> {
-                Toast.makeText(activity!!,"Add Appointment" ,Toast.LENGTH_SHORT).show()
+//                Toast.makeText(activity!!,"Add Appointment" ,Toast.LENGTH_SHORT).show()
+                setfragment(AppointmentListFragment(),patientDetails)
             }
             2 -> {
                 commonMethods.Logoutscreen()

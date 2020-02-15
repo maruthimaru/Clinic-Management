@@ -41,6 +41,26 @@
             tools:ignore="UnknownId">
 
             <TextView
+                android:id="@+id/doctor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_3dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/size_14dp"
+                android:textStyle="bold"
+                android:text="Data " />
+            <TextView
+                android:id="@+id/doctornumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/size_14dp"
+                android:padding="@dimen/size_3dp"
+                android:maxLength="@integer/int_10"
+                android:background="@drawable/bordergray"
+                android:inputType="phone"
+                android:hint="Enter Data" />
+
+            <TextView
                 android:id="@+id/finacialyeartotextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,40 +100,14 @@
             android:background="@drawable/bordergray"
             android:inputType="textPersonName"
             android:hint="Enter doctor name" />
-        <TextView
-            android:id="@+id/doctor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_3dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/size_14dp"
-            android:textStyle="bold"
-            android:text="Data " />
-        <TextView
-            android:id="@+id/doctornumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/size_14dp"
-            android:padding="@dimen/size_3dp"
-            android:maxLength="@integer/int_10"
-            android:background="@drawable/bordergray"
-            android:inputType="phone"
-            android:hint="Enter Data" />
-        <TextView
-            android:id="@+id/companyemailtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_3dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/size_14dp"
-            android:textStyle="bold"
-            android:text="Time" />
+
         <TextView
             android:id="@+id/doctoremail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_14dp"
             android:padding="@dimen/size_3dp"
+            android:visibility="gone"
             android:background="@drawable/bordergray"
             android:inputType="textPersonName"
             android:hint="Enter Time" />
@@ -136,6 +130,25 @@
             android:background="@drawable/bordergray"
             android:inputType="textPostalAddress"
             android:hint="Enter symptoms" />
+
+            <TextView
+                android:id="@+id/companyemailtextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_3dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/size_14dp"
+                android:textStyle="bold"
+                android:text="Time" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_2dp"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:layout_marginRight="@dimen/size_2dp"/>
+
 
             <RelativeLayout
                 android:layout_width="wrap_content"

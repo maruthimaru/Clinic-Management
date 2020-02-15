@@ -13,18 +13,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.adapter.ScheduleDoctortimeAdapter
 import com.example.medicalmanagement.db.AppDatabase
 import com.example.medicalmanagement.db.dao.DoctorRegisterDao
+import com.example.medicalmanagement.db.dao.ScheduleTimeDao
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
+import com.example.medicalmanagement.db.table.ScheduleTime
 import com.example.medicalmanagement.fragment.admin.DoctorFragment
 import com.example.medicalmanagement.helper.BitmapUtility
 import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.Constants
 import java.io.IOException
 
-class DoctorProfileFragment :Fragment(){
+class DoctorProfileFragment :Fragment(), ScheduleDoctortimeAdapter.ListAdapterListener {
 
+    private lateinit var scheduletimeAdapter: ScheduleDoctortimeAdapter
     private lateinit var doctorDetails: DoctorRegisterTable
     private val TAG: String=DoctorProfileFragment::class.java.simpleName
     internal var list=ArrayList<DoctorRegisterTable>()
@@ -42,6 +48,9 @@ class DoctorProfileFragment :Fragment(){
     lateinit var doctorRegisterDao: DoctorRegisterDao
     lateinit var bitmapUtility: BitmapUtility
     internal lateinit var commonMethods: CommonMethods
+    internal lateinit var recycleview: RecyclerView
+    lateinit var scheduleTimeDao: ScheduleTimeDao
+    internal  var timeList=ArrayList<ScheduleTime>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_doctor_profile,container,false)
@@ -59,13 +68,19 @@ class DoctorProfileFragment :Fragment(){
         specialist=view.findViewById(R.id.specialist)
         doctortime=view.findViewById(R.id.doctortime)
         password=view.findViewById(R.id.password)
+        recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
         appDatabase = AppDatabase.getDatabase(activity!!)
         bitmapUtility= BitmapUtility(activity!!)
         commonMethods=CommonMethods(activity!!)
         doctorRegisterDao=appDatabase.doctorregisterdao()
-
+        scheduleTimeDao=appDatabase.schudleTimeDao()
         submit_btn.setOnClickListener { askAppointment() }
 
+        recycleview.setHasFixedSize(true)
+        recycleview.layoutManager = GridLayoutManager(activity,4)
+
+
+        timeList = scheduleTimeDao.getTime() as ArrayList<ScheduleTime>
         var bundle =arguments
         if (bundle!=null){
             doctorDetails= bundle.getSerializable(Constants.doctorList) as DoctorRegisterTable
@@ -75,7 +90,16 @@ class DoctorProfileFragment :Fragment(){
             doctornumber.setText(doctorDetails.phone)
             doctoremail.setText(doctorDetails.email)
             specialist.setText(doctorDetails.specialist)
-            doctortime.setText(doctorDetails.time)
+
+            for (i in 0 until timeList.size) {
+                for (timeModel in doctorDetails.time!!) {
+                    Log.e("TAG", "timeModel = $timeModel schedulemodel ${timeList[i].timeing}")
+                    if (timeList[i].timeing.equals(timeModel))
+                        timeList[i].clickStatus = true
+                    continue
+                }
+            }
+            setAdapter(timeList)
             password.setText(doctorDetails.password)
         }
 
@@ -110,6 +134,16 @@ class DoctorProfileFragment :Fragment(){
             dialog.show()
 
         }
+
+    }
+
+    //set adapter
+    private fun setAdapter(list: ArrayList<ScheduleTime>) {
+
+        if (list.size > 0) {
+            scheduletimeAdapter = ScheduleDoctortimeAdapter(list,activity!!,this)
+            recycleview.adapter = scheduletimeAdapter
+        }
     }
 
     private fun askAppointment(){
@@ -120,7 +154,7 @@ class DoctorProfileFragment :Fragment(){
         val Doctortime=doctortime.text.toString()
         val Pass=password.text.toString()
         var logo = ""
-
+        val timing=scheduletimeAdapter.getClickedStatus()
         if (Doctorname.isNullOrEmpty()){
             doctorname.requestFocus()
             doctorname.error = "Please enter the doctor name"
@@ -137,9 +171,10 @@ class DoctorProfileFragment :Fragment(){
             specialist.requestFocus()
             specialist.error = "Please enter the specialist"
         }
-        else if (Doctortime.isNullOrEmpty()){
-            doctortime.requestFocus()
-            doctortime.error = "Please enter the doctor time"
+        else if (timing.size<=0){
+//            doctortime.requestFocus()
+//            doctortime.error = "Please enter the doctor time"
+            Toast.makeText(activity!!,"Please select the doctor time",Toast.LENGTH_SHORT).show()
         }
         else if (Pass.isNullOrEmpty()){
             password.requestFocus()
@@ -152,7 +187,7 @@ class DoctorProfileFragment :Fragment(){
             }
             doctorDetails.email=Doctoremail
             doctorDetails.password=Pass
-            doctorDetails.time=Doctortime
+            doctorDetails.time=timing
             doctorDetails.specialist=Special
             doctorDetails.phone=Doctornumber
             doctorDetails.name=Doctorname
@@ -228,6 +263,10 @@ class DoctorProfileFragment :Fragment(){
         } catch (o: OutOfMemoryError) {
         }
         return result
+    }
+
+    override fun onIemClick() {
+
     }
 
 
