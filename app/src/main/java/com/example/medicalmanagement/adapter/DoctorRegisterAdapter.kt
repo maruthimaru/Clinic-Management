@@ -50,7 +50,7 @@ class DoctorRegisterAdapter(private var listItems: ArrayList<DoctorRegisterTable
         var time=""
         for ( timeModel in list.time!!){
             if (time==""){
-                time=timeModel
+                time=timeModel!!
             }else{
                 time=time+","+timeModel
             }

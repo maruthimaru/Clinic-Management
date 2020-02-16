@@ -21,6 +21,7 @@ import com.example.medicalmanagement.R
 import com.example.medicalmanagement.adapter.ScheduleDoctortimeAdapter
 import com.example.medicalmanagement.adapter.ScheduletimeAdapter
 import com.example.medicalmanagement.db.AppDatabase
+import com.example.medicalmanagement.db.dao.DoctorRegDataConversion
 import com.example.medicalmanagement.db.dao.DoctorRegisterDao
 import com.example.medicalmanagement.db.dao.ScheduleTimeDao
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
@@ -99,7 +100,7 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
             val zips = arrayOf(".zip", ".rar")
             val csvs = arrayOf(".csv")
 
-            FilePickerBuilder.instance.setMaxCount(5)
+            FilePickerBuilder.instance.setMaxCount(1)
                     .setSelectedFiles(docPaths)
                     .addFileSupport("ZIP",zips)
                     .addFileSupport("CSV",csvs)
@@ -250,7 +251,7 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
                 }
 //                Log.e("TAG", "select event for photo=$resultCode")
             }
-            FilePickerConst.REQUEST_CODE_DOC->{
+            FilePickerConst.REQUEST_CODE_DOC-> {
 
 
                 if (resultCode === Activity.RESULT_OK && attr.data != null) {
@@ -260,7 +261,6 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
 
 //
 //                val selectedFileUri: Uri = data!!.getData()!!
-                Log.i(TAG, "selectedFileUri : ${docPaths[0]}")
 //                Log.i(TAG, "Selected File Path:${selectedFileUri.lastPathSegment}")
 //                val uri: Uri = data.data!!
 //                val file = File(uri.path) //create path from uri
@@ -289,48 +289,52 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
 //                } else {
 //                    Toast.makeText(activity!!, "Cannot upload file to server", Toast.LENGTH_SHORT).show()
 //                }
+                if (docPaths.size > 0) {
+                    Log.i(TAG, "selectedFileUri : ${docPaths[0]}")
+                    val filepath: String = docPaths[0] //assign it to a string(your choice).
+                    Log.e(TAG, "filepath : " + filepath)
+                    try {
+                        if (resultCode == Activity.RESULT_OK) {
+                            try {
 
-                val filepath: String = docPaths[0] //assign it to a string(your choice).
-                Log.e(TAG,"filepath : " +filepath)
-                try {
-                    if (resultCode == Activity.RESULT_OK) {
-                        try {
-
-                            val file = FileReader(filepath)
-                            Log.e(TAG,"file : " +file)
-                            val buffer = BufferedReader(file)
-                            var line = ""
-                            var iteration = 0
-                            while (buffer.readLine().also({ line = it }) != null) {
-                                if(iteration == 0) {
-                                    iteration++;
-                                    continue;
+                                val file = FileReader(filepath)
+                                Log.e(TAG, "file : " + file)
+                                val buffer = BufferedReader(file)
+                                var line = ""
+                                var iteration = 0
+                                while (buffer.readLine().also({ line = it }) != null) {
+                                    if (iteration == 0) {
+                                        iteration++;
+                                        continue;
+                                    }
+                                    val str: ArrayList<String> = line.split(",") as ArrayList<String> // defining
+                                    Log.e(TAG, "str : " + str)
+                                    val str6 = str[6].replace("[", "").replace("]","").replace("&", ",");
+                                    val strTime: ArrayList<String> = str6.split(",") as ArrayList<String> // defining
+                                    if (str.size > 0) {
+                                    Log.e(TAG,"list : " +strTime)
+//                                        val timing = DoctorRegDataConversion().toOptionValuesList(str[6])
+                                        list.add(DoctorRegisterTable(str[1], str[2], str[3], str[4], str[5], strTime, str[7]))
+                                    }
                                 }
-                                val str: ArrayList<String> = line.split(",") as ArrayList<String> // defining
-                                Log.e(TAG,"str : " +str)
-                                if ( str.size>0){
-//                                    Log.e(TAG,"list : " +str)
-                                    val timing=str[6].split(",") as ArrayList<String>
-                                    list.add( DoctorRegisterTable(str[1],str[2],str[3],str[4],str[5],timing,str[7]))
-                                }
-                            }
-                            Log.e(TAG,"List size demo")
-                            Log.e(TAG,"List size ${list.size}")
-//                            doctorRegisterDao.insert(list)
-
-                        }catch (e:Exception){
-                            Log.e(TAG,e.localizedMessage)
-                            Log.e(TAG,"List size ${list.size}")
+                                Log.e(TAG, "List size demo")
+                                Log.e(TAG, "List size ${list.size}")
                             doctorRegisterDao.insert(list)
+
+                            } catch (e: Exception) {
+                                Log.e(TAG, e.localizedMessage)
+                                Log.e(TAG, "List size ${list.size}")
+                                doctorRegisterDao.insert(list)
+                            }
+                        } else {
+                            Toast.makeText(activity!!, "Only csv file allowed", Toast.LENGTH_LONG).show()
                         }
-                    }else{
-                        Toast.makeText(activity!!,"Only csv file allowed",Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.localizedMessage)
                     }
-                }catch (e:Exception){
-                    Log.e(TAG,e.localizedMessage)
+
+
                 }
-
-
             }
         }
     }

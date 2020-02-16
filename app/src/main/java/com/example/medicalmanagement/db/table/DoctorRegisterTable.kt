@@ -45,7 +45,7 @@ class DoctorRegisterTable: Serializable{
     @TypeConverters(DoctorRegDataConversion::class)
     @SerializedName("time")
     @ColumnInfo(name = "time")
-    var time: List<String>? = null
+    var time: List<String?>? = null
 
     @SerializedName("password")
     @ColumnInfo(name = "password")
@@ -53,7 +53,7 @@ class DoctorRegisterTable: Serializable{
     var password: String? = null
 
 
-    constructor(name: String?, phone: String?, image: String?, email: String?, specialist: String?, time: List<String>?, password: String?) {
+    constructor(name: String?, phone: String?, image: String?, email: String?, specialist: String?, time: List<String?>?, password: String?) {
         this.name = name
         this.phone = phone
         this.image = image

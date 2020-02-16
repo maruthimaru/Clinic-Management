@@ -316,7 +316,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
             password.requestFocus()
             password.error = "Please enter the password"
         } else {
-            val convetedTime = DoctorRegDataConversion().fromOptionValuesList(selectedNamelist.time!!)
+            val convetedTime = DoctorRegDataConversion().fromOptionValuesList((selectedNamelist.time as List<String>?)!!)
 //            Log.e(TAG,"specialist time : " + selectedNamelist.id.toString() + "data: ${Doctornumber } time " +convetedTime)
             val searchList = patientAppointmentDao.getTime(selectedNamelist.id.toString(), Doctornumber)
             Log.e(TAG, "specialist name : " + searchList + "  searchList " + searchList)
@@ -326,7 +326,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
             if (searchList.size <= 0) {
                 timeList.clear()
                 for (timeModel in selectedNamelist.time!!) {
-                    timeList.add(ScheduleTime(timeModel))
+                    timeList.add(ScheduleTime(timeModel!!))
                 }
                 setAdapter(timeList)
             } else {
@@ -341,7 +341,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
                 }
 
                 for (timeModel in 0 until selectedNamelist.time!!.size) {
-                    timeList.add(ScheduleTime(selectedNamelist.time!![timeModel]))
+                    timeList.add(ScheduleTime(selectedNamelist.time!![timeModel]!!))
                     for (split in getconvetedTime) {
                         if (split.equals(selectedNamelist.time!![timeModel])){
                             Log.e(TAG, "getconvetedTime timeModel $timeModel split :" + split)

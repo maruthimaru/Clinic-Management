@@ -48,7 +48,7 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/size_14dp"
                 android:textStyle="bold"
-                android:text="Data " />
+                android:text="Date " />
             <TextView
                 android:id="@+id/doctornumber"
                 android:layout_width="match_parent"
@@ -74,10 +74,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/size_14dp"
-                android:maxLength="@integer/int_10"
                 android:padding="@dimen/size_3dp"
                 android:background="@drawable/bordergray"
                 android:inputType="text"
+                android:text="fsdagasdgadsgfdfgadsgv"
                 android:hint="Enter specialist " />
 
         <TextView
