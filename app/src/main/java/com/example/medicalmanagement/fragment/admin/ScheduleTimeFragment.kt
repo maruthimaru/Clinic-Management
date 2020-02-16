@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -60,7 +61,7 @@ class ScheduleTimeFragment : Fragment(), ScheduletimeAdapter.ListAdapterListener
         builder.setTitle("With RatingBar")
         val dialogLayout: View = inflater.inflate(R.layout.fragment_new_time, null)
         builder.setContentView(dialogLayout)
-        val time = builder.findViewById<TextView>(R.id.time)
+        val time = builder.findViewById<EditText>(R.id.time)
         val submit = builder.findViewById<TextView>(R.id.submit)
         submit.setOnClickListener {
             val stringTime=time.text.toString()

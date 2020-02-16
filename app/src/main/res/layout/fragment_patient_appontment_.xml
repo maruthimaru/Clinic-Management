@@ -69,7 +69,7 @@
                 android:textStyle="bold"
                 android:text="Enter specialist "
                 android:textSize="@dimen/size_14dp"/>
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:textStyle="bold"
             android:layout_marginTop="@dimen/size_20dp"
             android:text="Enter doctor name" />
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/doctorname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,6 +100,20 @@
             android:background="@drawable/bordergray"
             android:inputType="textPersonName"
             android:hint="Enter doctor name" />
+
+            <Button
+                android:id="@+id/search_btn"
+                android:layout_width="@dimen/size_100dp"
+                android:layout_height="@dimen/size_40dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/buttonboxshapeandbackg1"
+                android:text="Search"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:textSize="@dimen/size_14dp"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
         <TextView
             android:id="@+id/doctoremail"
@@ -111,25 +125,6 @@
             android:background="@drawable/bordergray"
             android:inputType="textPersonName"
             android:hint="Enter Time" />
-        <TextView
-            android:id="@+id/companyaddresstextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_3dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/size_14dp"
-            android:textStyle="bold"
-            android:text="Enter symptoms" />
-        <EditText
-            android:id="@+id/specialist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="@integer/int_200"
-            android:textSize="@dimen/size_14dp"
-            android:padding="@dimen/size_3dp"
-            android:background="@drawable/bordergray"
-            android:inputType="textPostalAddress"
-            android:hint="Enter symptoms" />
 
             <TextView
                 android:id="@+id/companyemailtextView"
@@ -148,6 +143,27 @@
                 android:layout_marginLeft="@dimen/size_2dp"
                 android:layout_marginTop="@dimen/size_2dp"
                 android:layout_marginRight="@dimen/size_2dp"/>
+
+            <TextView
+                android:id="@+id/companyaddresstextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_3dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/size_14dp"
+                android:textStyle="bold"
+                android:text="Enter symptoms" />
+            <EditText
+                android:id="@+id/specialist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="@integer/int_200"
+                android:textSize="@dimen/size_14dp"
+                android:padding="@dimen/size_3dp"
+                android:background="@drawable/bordergray"
+                android:inputType="textPostalAddress"
+                android:hint="Enter symptoms" />
+
 
 
             <RelativeLayout

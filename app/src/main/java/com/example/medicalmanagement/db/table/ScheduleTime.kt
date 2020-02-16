@@ -16,7 +16,7 @@ class ScheduleTime {
     @SerializedName("id")
     lateinit var timeing:String
 
-    var clickStatus:Boolean = false
+    var clickStatus:Int = 0
 
     constructor(timeing: String) {
         this.timeing = timeing

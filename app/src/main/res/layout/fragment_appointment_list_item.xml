@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/real"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="@dimen/size_3dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_5dp"
+            android:layout_toEndOf="@+id/image"
+            android:layout_toRightOf="@+id/cardview"
+            android:background="@color/primary_text_default_material_dark"
+            tools:ignore="UnknownId">
+
+            <TextView
+                android:id="@+id/Doctor_Name"
+                android:layout_alignParentStart="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doctor_Name"
+                android:textColor="@color/black"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:layout_toStartOf="@+id/pass_number"
+                android:layout_marginRight="@dimen/size_15dp"
+                tools:ignore="NotSibling"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/pass_number" />
+
+            <TextView
+                android:id="@+id/doctor_number"
+                style="@style/TextViewww"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:layout_toLeftOf="@+id/dates"
+                android:layout_alignParentStart="true"
+                android:layout_marginRight="@dimen/size_15dp"
+                android:layout_below="@+id/Doctor_Name"
+                android:text="doctor number"
+                android:layout_alignParentLeft="true" />
+            <TextView
+                android:id="@+id/doctor_mail"
+                style="@style/TextViewww"
+                android:layout_toLeftOf="@+id/time"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:layout_below="@+id/doctor_number"
+                android:layout_marginRight="@dimen/size_15dp"
+                android:text="Email"
+                android:layout_alignParentLeft="true" />
+
+            <ImageView
+                android:id="@+id/message"
+                style="@style/TextViewww"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:layout_marginRight="@dimen/size_10dp"
+                android:paddingRight="@dimen/size_5dp"
+                android:paddingLeft="@dimen/size_5dp"
+                android:src="@drawable/ic_info"
+                android:visibility="visible"
+                android:layout_toLeftOf="@id/delete"
+                />
+
+            <ImageView
+                android:id="@+id/delete"
+                style="@style/TextViewww"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:layout_marginRight="@dimen/size_10dp"
+                android:paddingRight="@dimen/size_5dp"
+                android:paddingLeft="@dimen/size_5dp"
+                android:src="@drawable/ic_delete"
+                android:visibility="visible"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:id="@+id/dates"
+                style="@style/TextViewww"
+                android:layout_below="@+id/pass_number"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+               android:visibility="gone"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:maxLength="@integer/int_10"
+                android:text="12/10/2019"
+                android:textSize="@dimen/size_12dp" />
+
+            <TextView
+                android:id="@+id/timeeee"
+                style="@style/TextViewww"
+                android:layout_below="@+id/dates"
+                android:layout_alignParentEnd="true"
+               android:visibility="gone"
+                android:minWidth="@dimen/size_40dp"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:paddingStart="@dimen/size_5dp"
+                android:paddingEnd="@dimen/size_5dp"
+                android:text="15:29"
+                android:textSize="@dimen/size_10dp"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/pass_number"
+                android:layout_alignParentEnd="true"
+               android:visibility="gone"
+                android:gravity="center"
+                android:text="M00014"
+                android:textColor="@color/hint_color"
+                android:layout_alignParentRight="true" />
+            <View
+                android:id="@+id/view"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/size_0_7dp"
+                android:layout_below="@id/doctor_mail"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:background="@color/hint_color" />
+            <TextView
+                android:id="@+id/specialist"
+                style="@style/TextViewww"
+                android:layout_below="@+id/view"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:text="specialist" />
+            <TextView
+                android:id="@+id/doctortime"
+                style="@style/TextViewww"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/view"
+                android:layout_marginTop="@dimen/size_2dp"
+                android:background="@color/colorPrimary"
+                android:text="time"
+                android:paddingRight="@dimen/size_5dp"
+
+                android:paddingLeft="@dimen/size_5dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_10dp"
+                android:textStyle="bold"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

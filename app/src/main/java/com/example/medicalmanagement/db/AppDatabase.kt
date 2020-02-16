@@ -13,7 +13,7 @@ import com.example.medicalmanagement.db.table.ScheduleTime
 
 
 @Database(
-        entities = [DoctorRegisterTable::class,PatientRegisterTable::class,ScheduleTime::class,PatientAppointmentTable::class],version = 10)
+        entities = [DoctorRegisterTable::class,PatientRegisterTable::class,ScheduleTime::class,PatientAppointmentTable::class],version = 12)
 abstract class AppDatabase:RoomDatabase(){
     abstract fun doctorregisterdao(): DoctorRegisterDao
     abstract fun patientRegisterDao():PatientRegisterDao
@@ -30,7 +30,7 @@ abstract class AppDatabase:RoomDatabase(){
 
                         INSTANCE = Room.databaseBuilder(
                                 context.applicationContext,
-                                AppDatabase::class.java, "WizeGate.db"
+                                AppDatabase::class.java, "Medical.db"
                         )
                                 .allowMainThreadQueries()
                                 .fallbackToDestructiveMigration()

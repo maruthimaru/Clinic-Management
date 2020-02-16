@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.db.table.ScheduleTime
 
-class ScheduleDoctortimeAdapter(private val list:ArrayList<ScheduleTime>, private val context:Context,
-                                private val mListener: ListAdapterListener): RecyclerView.Adapter<ScheduleDoctortimeAdapter.ViewHolder>() {
+class SchedulePatienttimeAdapter(private val list:ArrayList<ScheduleTime>, private val context:Context,
+                                 private val mListener: ListAdapterListener): RecyclerView.Adapter<SchedulePatienttimeAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -57,6 +58,9 @@ class ScheduleDoctortimeAdapter(private val list:ArrayList<ScheduleTime>, privat
         if (model.clickStatus==1) {
             holder.textViewTime.setBackground(context.resources.getDrawable(R.drawable.button_background_40))
             holder.textViewTime.setTextColor(context.resources.getColor(R.color.white))
+        }else if (model.clickStatus==2) {
+            holder.textViewTime.setBackground(context.resources.getDrawable(R.drawable.button_background_red_40))
+            holder.textViewTime.setTextColor(context.resources.getColor(R.color.white))
         }else{
             holder.textViewTime.setBackground(context.resources.getDrawable(R.drawable.borderblack))
             holder.textViewTime.setTextColor(context.resources.getColor(R.color.black))
@@ -68,10 +72,12 @@ class ScheduleDoctortimeAdapter(private val list:ArrayList<ScheduleTime>, privat
                 model.clickStatus = 1
                 holder.textViewTime.setBackground(context.resources.getDrawable(R.drawable.button_background_40))
                 holder.textViewTime.setTextColor(context.resources.getColor(R.color.white))
-            }else{
+            }else if (model.clickStatus==1){
                 model.clickStatus = 0
                 holder.textViewTime.setBackground(context.resources.getDrawable(R.drawable.borderblack))
                 holder.textViewTime.setTextColor(context.resources.getColor(R.color.black))
+            }else{
+                Toast.makeText(context,"Already booked" ,Toast.LENGTH_SHORT).show()
             }
         }
 

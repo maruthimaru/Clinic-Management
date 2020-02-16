@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,51 +19,65 @@ import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
+import com.example.medicalmanagement.adapter.DoctorNameAdapter
+import com.example.medicalmanagement.adapter.DoctorSpecialistAdapter
+import com.example.medicalmanagement.adapter.ScheduleDoctortimeAdapter
+import com.example.medicalmanagement.adapter.SchedulePatienttimeAdapter
 import com.example.medicalmanagement.db.AppDatabase
-import com.example.medicalmanagement.db.dao.PatientRegisterDao
+import com.example.medicalmanagement.db.dao.*
+import com.example.medicalmanagement.db.table.DoctorRegisterTable
 import com.example.medicalmanagement.db.table.PatientAppointmentTable
 import com.example.medicalmanagement.db.table.PatientRegisterTable
+import com.example.medicalmanagement.db.table.ScheduleTime
 import com.example.medicalmanagement.helper.BitmapUtility
 import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.Constants
 import com.example.medicalmanagement.helper.RecyclerTouchListener
 import com.example.medicalmanagement.helper.adapter.UploadimageAdapter
 import com.example.medicalmanagement.helper.pojo.ImagesModel
-import droidninja.filepicker.FilePickerBuilder
 import droidninja.filepicker.FilePickerConst
 import droidninja.filepicker.FilePickerConst.KEY_SELECTED_DOCS
 import id.zelory.compressor.Compressor
+import kotlinx.android.synthetic.main.fragment_iom_report_list_item.*
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class PatientAppintmentFragment : Fragment() {
+class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelectedLisitner, DoctorNameAdapter.ItemSelectedLisitner, SchedulePatienttimeAdapter.ListAdapterListener {
+    private lateinit var selectedNamelist: DoctorRegisterTable
+    private lateinit var scheduletimeAdapter: SchedulePatienttimeAdapter
+    private lateinit var timeList: java.util.ArrayList<ScheduleTime>
     private lateinit var uploadimageAdapter: UploadimageAdapter
-    private lateinit var patientDetails: PatientAppointmentTable
-    private val TAG: String= PatientAppintmentFragment::class.java.simpleName
-    internal var list=ArrayList<PatientRegisterTable>()
-    private var phtobitmap: Bitmap?=null
+    private lateinit var patientDetails: PatientRegisterTable
+    private val TAG: String = PatientAppintmentFragment::class.java.simpleName
+    internal var list = ArrayList<PatientRegisterTable>()
+    private var phtobitmap: Bitmap? = null
     lateinit var companyimage: ImageView
     internal lateinit var companyphotoeditbtn: ImageButton
-    lateinit var doctorname:EditText
-    lateinit var doctornumber:TextView
+    lateinit var doctorname: AutoCompleteTextView
+    lateinit var doctornumber: TextView
     lateinit var submit_btn: Button
-    lateinit var doctoremail:TextView
-    lateinit var specialist:EditText
-    lateinit var password:EditText
+    lateinit var search_btn: Button
+    lateinit var doctoremail: TextView
+    lateinit var specialist: EditText
+    lateinit var password: AutoCompleteTextView
     lateinit var appDatabase: AppDatabase
     lateinit var patientRegisterDao: PatientRegisterDao
-    lateinit var bitmapUtility:BitmapUtility
+    lateinit var patientAppointmentDao: PatientAppointmentDao
+    lateinit var doctorRegisterDao: DoctorRegisterDao
+    lateinit var scheduleTimeDao: ScheduleTimeDao
+    lateinit var bitmapUtility: BitmapUtility
     internal lateinit var commonMethods: CommonMethods
     val requestcode = 3
 
-    private val imgList=ArrayList<ImagesModel>()
+    private val imgList = ArrayList<ImagesModel>()
     private val imagelist = ArrayList<String>()
     private val imagepath = ArrayList<String>()
     private var mCurrentPhotoPath: String? = null
@@ -74,41 +87,77 @@ class PatientAppintmentFragment : Fragment() {
     lateinit var recyclerView_doc_img: RecyclerView
     private var compressedImage: File? = null
 
-    var docPaths=ArrayList<String>()
+    var docPaths = ArrayList<String>()
+    internal lateinit var recycleview: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return  inflater.inflate(R.layout.fragment_patient_appontment_, container, false)
+        return inflater.inflate(R.layout.fragment_patient_appontment_, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        companyimage=view.findViewById(R.id.companyImg)
-        companyphotoeditbtn=view.findViewById(R.id.imageButton2)
-        doctorname=view.findViewById(R.id.doctorname)
+        companyimage = view.findViewById(R.id.companyImg)
+        companyphotoeditbtn = view.findViewById(R.id.imageButton2)
+        doctorname = view.findViewById(R.id.doctorname)
         submit_btn = view.findViewById(R.id.submit_btn)
-        doctornumber=view.findViewById(R.id.doctornumber)
-        doctoremail=view.findViewById(R.id.doctoremail)
-        specialist=view.findViewById(R.id.specialist)
-        password=view.findViewById(R.id.password)
+        search_btn = view.findViewById(R.id.search_btn)
+        doctornumber = view.findViewById(R.id.doctornumber)
+        doctoremail = view.findViewById(R.id.doctoremail)
+        specialist = view.findViewById(R.id.specialist)
+        password = view.findViewById(R.id.password)
+        recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
         recyclerView_doc_img = view.findViewById(R.id.recyclerView_doc_img)
         docpic = view.findViewById(R.id.docpic)
         appDatabase = AppDatabase.getDatabase(activity!!)
-        bitmapUtility= BitmapUtility(activity!!)
-        commonMethods=CommonMethods(activity!!)
-        patientRegisterDao=appDatabase.patientRegisterDao()
+        bitmapUtility = BitmapUtility(activity!!)
+        commonMethods = CommonMethods(activity!!)
+        patientRegisterDao = appDatabase.patientRegisterDao()
+        doctorRegisterDao = appDatabase.doctorregisterdao()
+        scheduleTimeDao = appDatabase.schudleTimeDao()
+        patientAppointmentDao = appDatabase.patientAppointmentDao()
+        recycleview.setHasFixedSize(true)
+        recycleview.layoutManager = GridLayoutManager(activity, 4)
 
-        var bundle =arguments
-//        if (bundle!=null){
-//            patientDetails= bundle.getSerializable(Constants.patientList) as PatientAppointmentTable
-////            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
-////            commonMethods.loadImage(image,companyimage)
-//            doctorname.setText(patientDetails.pName)
-//            doctornumber.setText(patientDetails.phone)
-//            doctoremail.setText(patientDetails.email)
-//            specialist.setText(patientDetails.age)
-//        }
+        doctornumber.setText(commonMethods.getdate(Constants.dateformat1))
+        doctornumber.setOnClickListener {
+            commonMethods.clickDate(doctornumber)
+        }
+        var doctorList = doctorRegisterDao.getSpecialist() as ArrayList
+        val hashSet = HashSet(doctorList);
+        Log.e(TAG, " hasset " + hashSet.size)
+        doctorList.clear()
+        doctorList = ArrayList<String>(hashSet)
+        val specialistAdapter = DoctorSpecialistAdapter(activity!!, 0, 0, doctorList, this)
+        password.setAdapter(specialistAdapter)
+        password.threshold = 1
+        var bundle = arguments
+        if (bundle != null) {
+            patientDetails = bundle.getSerializable(Constants.patientList) as PatientRegisterTable
+//            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
+//            commonMethods.loadImage(image,companyimage)
+        }
+
+        password.setOnItemClickListener { parent, view, position, id ->
+            val selectedSpecialist = parent!!.adapter.getItem(position) as String
+            Log.e(TAG, "specialist name : " + selectedSpecialist)
+            val doctorSpecialistList = doctorRegisterDao.getSpecialist(selectedSpecialist!!)
+            Log.e(TAG, "doctorSpecialistList " + doctorSpecialistList.size)
+            val nameAdapter = DoctorNameAdapter(activity!!, 0, 0, doctorSpecialistList, this)
+            doctorname.setAdapter(nameAdapter)
+            doctorname.threshold = 1
+        }
+        timeList = ArrayList<ScheduleTime>()
+
+        doctorname.setOnItemClickListener { parent, view, position, id ->
+            selectedNamelist = parent!!.adapter.getItem(position) as DoctorRegisterTable
+
+        }
 
         submit_btn.setOnClickListener { askAppointment() }
+
+        search_btn.setOnClickListener {
+            searchDoctor()
+        }
 
         companyphotoeditbtn.setOnClickListener {
             // setup the alert builder
@@ -194,6 +243,15 @@ class PatientAppintmentFragment : Fragment() {
 
     }
 
+    //set adapter
+    private fun setAdapter(list: ArrayList<ScheduleTime>) {
+
+        if (list.size > 0) {
+            scheduletimeAdapter = SchedulePatienttimeAdapter(list, activity!!, this)
+            recycleview.adapter = scheduletimeAdapter
+        }
+    }
+
     private fun createImageFile(): File {
         val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera")
         if (!mediaStorageDir.exists()) {
@@ -205,49 +263,115 @@ class PatientAppintmentFragment : Fragment() {
     }
 
 
-    private fun askAppointment(){
-        val Doctorname=doctorname.text.toString()
-        val Doctornumber=doctornumber.text.toString()
-        val Doctoremail=doctoremail.text.toString()
-        val Special=specialist.text.toString()
-        val Pass=password.text.toString()
+    private fun askAppointment() {
+        val Doctorname = doctorname.text.toString()
+        val Doctornumber = doctornumber.text.toString()
+
+        val Special = specialist.text.toString()
+        val Pass = password.text.toString()
         var logo = ""
 
-        if (Doctorname.isNullOrEmpty()){
+        val timing = scheduletimeAdapter.getClickedStatus()
+        if (Doctorname.isNullOrEmpty()) {
             doctorname.requestFocus()
             doctorname.error = "Please enter the doctor name"
-        }
-        else if (Doctornumber.isNullOrEmpty()){
+        } else if (Doctornumber.isNullOrEmpty()) {
             doctornumber.requestFocus()
             doctornumber.error = "Please enter the doctor number"
-        }
-        else if (Doctoremail.isNullOrEmpty()){
-            doctoremail.requestFocus()
-            doctoremail.error = "Please enter the doctor email"
-        }
-        else if (Special.isNullOrEmpty()){
+        } else if (Special.isNullOrEmpty()) {
             specialist.requestFocus()
-            specialist.error = "Please enter the specialist"
-        }
-        else if (Pass.isNullOrEmpty()){
+            specialist.error = "Please enter the Symptoms"
+        } else if (Pass.isNullOrEmpty()) {
             password.requestFocus()
             password.error = "Please enter the password"
-        }else{
-            if (phtobitmap != null) {
-                logo = bitmapUtility.getStringImage(phtobitmap!!)
-            } else {
-                logo = commonMethods.getBaseImage(commonMethods.getBytes((companyimage.drawable as BitmapDrawable).bitmap))
-            }
-
-            patientDetails.email=Doctoremail
-            patientDetails.age=Special
-            patientDetails.phone=Doctornumber
+        } else {
+            val appointmentList = ArrayList<PatientAppointmentTable>()
+            appointmentList.add(PatientAppointmentTable(patientDetails.name, imagelist, patientDetails.phone, patientDetails.age, patientDetails.email,
+                    selectedNamelist.id!!.toString(), selectedNamelist.name, selectedNamelist.specialist, Doctornumber, timing))
 
             Log.e("TAG", " doctorregister  " + list.size)
-            Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
-//            patientRegisterDao.update(patientDetails)
-            Log.e(TAG,"insertdata " + patientRegisterDao.getall().size)
+            Toast.makeText(activity!!, "Register successfully", Toast.LENGTH_SHORT).show()
+            patientAppointmentDao.insert(appointmentList)
 //            list = patientRegisterDao.getall() as MutableList<DoctorRegisterTable>
+
+        }
+
+    }
+
+    private fun searchDoctor() {
+        val Doctorname = doctorname.text.toString()
+        val Doctornumber = doctornumber.text.toString()
+//        val Doctoremail=doctoremail.text.toString()
+        val Special = specialist.text.toString()
+        val Pass = password.text.toString()
+        var logo = ""
+
+        if (Doctorname.isNullOrEmpty()) {
+            doctorname.requestFocus()
+            doctorname.error = "Please enter the doctor name"
+        } else if (Doctornumber.isNullOrEmpty()) {
+            doctornumber.requestFocus()
+            doctornumber.error = "Please enter the doctor number"
+        } else if (Pass.isNullOrEmpty()) {
+            password.requestFocus()
+            password.error = "Please enter the password"
+        } else {
+            val convetedTime = DoctorRegDataConversion().fromOptionValuesList(selectedNamelist.time!!)
+//            Log.e(TAG,"specialist time : " + selectedNamelist.id.toString() + "data: ${Doctornumber } time " +convetedTime)
+            val searchList = patientAppointmentDao.getTime(selectedNamelist.id.toString(), Doctornumber)
+            Log.e(TAG, "specialist name : " + searchList + "  searchList " + searchList)
+
+
+
+            if (searchList.size <= 0) {
+                timeList.clear()
+                for (timeModel in selectedNamelist.time!!) {
+                    timeList.add(ScheduleTime(timeModel))
+                }
+                setAdapter(timeList)
+            } else {
+                timeList.clear()
+
+//                for (i in 0 until selectedNamelist.time!!.size) {
+//                    timeList.add(ScheduleTime(selectedNamelist.time!![i]))
+//                }
+                val getconvetedTime=ArrayList<String>()
+                for (split in searchList) {
+                    getconvetedTime.addAll(DoctorRegDataConversion().toOptionValuesList(split) as ArrayList<String>)
+                }
+
+                for (timeModel in 0 until selectedNamelist.time!!.size) {
+                    timeList.add(ScheduleTime(selectedNamelist.time!![timeModel]))
+                    for (split in getconvetedTime) {
+                        if (split.equals(selectedNamelist.time!![timeModel])){
+                            Log.e(TAG, "getconvetedTime timeModel $timeModel split :" + split)
+                            timeList[timeModel].clickStatus=2
+                        }
+                    }
+                }
+
+
+//                for (i in 0 until selectedNamelist.time!!.size) {
+//                    timeList.add(ScheduleTime(selectedNamelist.time!![i]))
+//                    for (timeModel in searchList){
+//
+////                        val str = selecModel.time!!.replaceAll("\\[", "").replaceAll("\\]","");
+////                            Log.e(TAG, " selecModel.phone selecModel.time!! ${timeModel} and  selectedNamelist.time!![i] ${selectedNamelist.time!![i]}")
+////                            if (selecModel.phone.equals(patientDetails.phone) && timeModel.equals(selectedNamelist.time!![i])) {
+////                                timeList[i].clickStatus = 1
+////                                break
+////                            } else
+//                                if (timeModel.equals(selectedNamelist.time!![i])){
+//                                timeList[i].clickStatus = 2
+//                                break
+//                            }else{
+//                                timeList[i].clickStatus = 0
+//                            }
+//
+//                    }
+//                }
+                setAdapter(timeList)
+            }
 
         }
 
@@ -261,7 +385,7 @@ class PatientAppintmentFragment : Fragment() {
 
                     val bp = data!!.extras!!.get("data") as Bitmap
                     val resized = Bitmap.createScaledBitmap(bp, 100, 100, true)
-                    phtobitmap=resized
+                    phtobitmap = resized
                     val conv_bm = getRoundedRectBitmap(resized, 100)
                     companyimage.setImageBitmap(null)
                     companyimage.setImageBitmap(conv_bm)
@@ -299,7 +423,7 @@ class PatientAppintmentFragment : Fragment() {
                 }
 //                Log.e("TAG", "select event for photo=$resultCode")
             }
-            FilePickerConst.REQUEST_CODE_DOC->{
+            FilePickerConst.REQUEST_CODE_DOC -> {
 
 
                 if (resultCode === Activity.RESULT_OK && attr.data != null) {
@@ -340,42 +464,42 @@ class PatientAppintmentFragment : Fragment() {
 //                }
 
                 val filepath: String = docPaths[0] //assign it to a string(your choice).
-                Log.e(TAG,"filepath : " +filepath)
+                Log.e(TAG, "filepath : " + filepath)
                 try {
                     if (resultCode == Activity.RESULT_OK) {
                         try {
 
                             val file = FileReader(filepath)
-                            Log.e(TAG,"file : " +file)
+                            Log.e(TAG, "file : " + file)
                             val buffer = BufferedReader(file)
                             var line = ""
                             var iteration = 0
                             while (buffer.readLine().also({ line = it }) != null) {
-                                if(iteration == 0) {
+                                if (iteration == 0) {
                                     iteration++;
                                     continue;
                                 }
                                 val str: ArrayList<String> = line.split(",") as ArrayList<String> // defining
-                                Log.e(TAG,"str : " +str)
-                                if ( str.size>0){
+                                Log.e(TAG, "str : " + str)
+                                if (str.size > 0) {
 //                                    Log.e(TAG,"list : " +str)
 //                                    list.add( PatientAppointmentTable(str[1],str[2],str[3],str[4],str[5],str[6],str[7]))
                                 }
                             }
-                            Log.e(TAG,"List size demo")
-                            Log.e(TAG,"List size ${list.size}")
+                            Log.e(TAG, "List size demo")
+                            Log.e(TAG, "List size ${list.size}")
 //                            patientRegisterDao.insert(list)
 
-                        }catch (e:Exception){
-                            Log.e(TAG,e.localizedMessage)
-                            Log.e(TAG,"List size ${list.size}")
+                        } catch (e: Exception) {
+                            Log.e(TAG, e.localizedMessage)
+                            Log.e(TAG, "List size ${list.size}")
                             patientRegisterDao.insert(list)
                         }
-                    }else{
-                        Toast.makeText(activity!!,"Only csv file allowed",Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(activity!!, "Only csv file allowed", Toast.LENGTH_LONG).show()
                     }
-                }catch (e:Exception){
-                    Log.e(TAG,e.localizedMessage)
+                } catch (e: Exception) {
+                    Log.e(TAG, e.localizedMessage)
                 }
 
 
@@ -461,12 +585,39 @@ class PatientAppintmentFragment : Fragment() {
     }
 
 
-
     private fun setfragment(_fragment: Fragment) {
         val fm = fragmentManager
         val fragmentTransaction = fm!!.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout, _fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+    }
+
+    override fun onItemClickSpecialist(id: String) {
+
+    }
+
+    override fun onClickCountEmpSpecialist(count: Int) {
+
+    }
+
+    override fun onClickSpecialist(items: DoctorRegisterTable) {
+
+    }
+
+    override fun onItemClick(id: String) {
+
+    }
+
+    override fun onClickCountEmp(count: Int) {
+
+    }
+
+    override fun onClick(items: DoctorRegisterTable) {
+
+    }
+
+    override fun onIemClick() {
+
     }
 }

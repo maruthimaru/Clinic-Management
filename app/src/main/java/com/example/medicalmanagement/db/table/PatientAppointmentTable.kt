@@ -51,8 +51,17 @@ class PatientAppointmentTable: Serializable{
     @Expose
     var specialist: String? = null
 
-    constructor(id: Int?, pName: String?, imagelist: List<String>, phone: String?, age: String?, email: String?, dId: String?, dName: String?, specialist: String?) {
-        this.id = id
+    @SerializedName("date")
+    @Expose
+    var date: String? = null
+
+
+    @TypeConverters(DoctorRegDataConversion::class)
+    @SerializedName("time")
+    @Expose
+    var time : List<String>?=null
+
+    constructor( pName: String?, imagelist: List<String>?, phone: String?, age: String?, email: String?, dId: String?, dName: String?, specialist: String?, date: String?, time: List<String>?) {
         this.pName = pName
         this.imagelist = imagelist
         this.phone = phone
@@ -61,5 +70,7 @@ class PatientAppointmentTable: Serializable{
         this.dId = dId
         this.dName = dName
         this.specialist = specialist
+        this.date = date
+        this.time = time
     }
 }

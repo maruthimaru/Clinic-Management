@@ -8,10 +8,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.nfc.Tag
+import android.os.Build
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.activity.LoginActivity
@@ -70,6 +74,47 @@ class CommonMethods{
         return str
     }
 
+    // get Date from
+    fun getdate(input: String): String {
+        val df = SimpleDateFormat(input)
+        return df.format(Calendar.getInstance().time)
+    }
+
+    fun getDate(inputFormat: String, input: String): Long {
+        val format = SimpleDateFormat(inputFormat)
+        val date = format.parse(input)
+        return date.time
+
+    }
+
+    //used in old inward outward registration
+    fun clickDate(data :TextView) {
+        val cldr = Calendar.getInstance()
+        val day = cldr.get(Calendar.DAY_OF_MONTH)
+        val month = cldr.get(Calendar.MONTH)
+        val year = cldr.get(Calendar.YEAR)
+        picker = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            var monthOfYear = monthOfYear
+            monthOfYear = monthOfYear + 1
+            var fm = "" + monthOfYear
+            var fd = "" + dayOfMonth
+            if (monthOfYear < 10) {
+                fm = "0$monthOfYear"
+            }
+            if (dayOfMonth < 10) {
+                fd = "0$dayOfMonth"
+            }
+            //                        _Date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+            Date = "$fd-$fm-$year"
+            data.setText(Date)
+        }, year, month, day)
+        picker!!.show()
+        val minDate = getDate(Constants.dateformat1, getdate(Constants.ddmmyyyy))
+        Log.e(TAG, "DATE VALIDATION " + minDate)
+        picker!!.datePicker.minDate = minDate
+    }
+
+
     // convert from bitmap to byte array
     @Throws(Exception::class)
     fun getBytes(bitmap: Bitmap): ByteArray {
@@ -121,6 +166,7 @@ class CommonMethods{
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun hideKeyboard() {
         //Convert Context to Activity
         val activity = convertActivity(context)

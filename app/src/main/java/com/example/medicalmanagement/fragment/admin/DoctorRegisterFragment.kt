@@ -146,9 +146,8 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
 
     //set adapter
     private fun setAdapter(list: ArrayList<ScheduleTime>) {
-
+        scheduletimeAdapter = ScheduleDoctortimeAdapter(list,activity!!,this)
         if (list.size > 0) {
-            scheduletimeAdapter = ScheduleDoctortimeAdapter(list,activity!!,this)
             recycleview.adapter = scheduletimeAdapter
         }
     }
@@ -163,6 +162,8 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
         var logo = ""
 
         val timing=scheduletimeAdapter.getClickedStatus()
+
+        Log.e(TAG," timing "+ timing)
 
         if (Doctorname.isNullOrEmpty()){
             doctorname.requestFocus()

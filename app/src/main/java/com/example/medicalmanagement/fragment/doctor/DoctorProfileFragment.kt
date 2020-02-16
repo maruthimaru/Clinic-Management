@@ -95,7 +95,7 @@ class DoctorProfileFragment :Fragment(), ScheduleDoctortimeAdapter.ListAdapterLi
                 for (timeModel in doctorDetails.time!!) {
                     Log.e("TAG", "timeModel = $timeModel schedulemodel ${timeList[i].timeing}")
                     if (timeList[i].timeing.equals(timeModel))
-                        timeList[i].clickStatus = true
+                        timeList[i].clickStatus = 1
                     continue
                 }
             }
