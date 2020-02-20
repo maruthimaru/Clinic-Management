@@ -14,6 +14,7 @@ import com.example.medicalmanagement.R
 import com.example.medicalmanagement.db.table.DoctorRegisterTable
 import com.example.medicalmanagement.fragment.admin.AdminHomeFragment
 import com.example.medicalmanagement.fragment.doctor.DoctorFragmentDrawer
+import com.example.medicalmanagement.fragment.doctor.DoctorHomeFragment
 import com.example.medicalmanagement.fragment.doctor.DoctorProfileFragment
 import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.Constants
@@ -104,7 +105,7 @@ lateinit var doctorDetails:DoctorRegisterTable
         if (bundle!=null){
             doctorDetails= bundle.getSerializable(Constants.doctorList) as DoctorRegisterTable
         }
-        setfragment(DoctorProfileFragment(),doctorDetails)
+        setfragment(DoctorHomeFragment(),doctorDetails)
 
 
         drawerDriverFragment =

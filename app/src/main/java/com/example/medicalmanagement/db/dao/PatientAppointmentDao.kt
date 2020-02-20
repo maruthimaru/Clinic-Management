@@ -27,4 +27,7 @@ interface PatientAppointmentDao{
     @Query("Delete from patient_appointment_table where id=:id")
     fun  delete(id:Int)
 
+    @Query("Select * from patient_appointment_table where dId=:doctorId")
+    fun  getAppointPatient(doctorId:String):List<PatientAppointmentTable>
+
 }
