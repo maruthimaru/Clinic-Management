@@ -1,6 +1,7 @@
 package com.example.medicalmanagement.fragment.admin
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.activity.AdminMainActivity
 import com.example.medicalmanagement.adapter.AdminHomeAdapter
+import com.example.medicalmanagement.fragment.admin.chart.HalfPieChartActivity
 import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.pojo.AdminHomeModel
 import java.util.ArrayList
@@ -43,11 +45,12 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
         recyclerView.setHasFixedSize(true)
         commonMethods= CommonMethods(activity!!)
 //        list.add(AdminHomeModel(R.drawable.ic_logo, getString(R.string.mydetails)))
-//        list.add(AdminHomeModel(R.drawable.ic_book_appiontment, getString(R.string.book_appiontment)))
 //        list.add(AdminHomeModel(R.drawable.ic_viewbook, getString(R.string.view_book)))
-//        list.add(AdminHomeModel(R.drawable.ic_cancel_book, getString(R.string.cancel_book)))
+
         list.add(AdminHomeModel(R.drawable.ic_search_doctor, getString(R.string.add_doctor)))
+        list.add(AdminHomeModel(R.drawable.ic_book_appiontment, getString(R.string.appointment)))
         list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.timimg)))
+        list.add(AdminHomeModel(R.drawable.graph, getString(R.string.graph)))
         list.add(AdminHomeModel(R.drawable.ic_logout, getString(R.string.logout)))
 
 
@@ -75,15 +78,18 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
             setfragment(DoctorFragment())
             }
             1 -> {
-                setfragment(ScheduleTimeFragment())
+                setfragment(AllAppointmentListFragment())
             }
             2 -> {
-                commonMethods.Logoutscreen()
+                setfragment(ScheduleTimeFragment())
+
             }
             3 -> {
+//                setfragment(Graph())
+                startActivity(Intent(activity!!,HalfPieChartActivity::class.java))
             }
             4 -> {
-
+                commonMethods.Logoutscreen()
             }
             5 -> {
             }

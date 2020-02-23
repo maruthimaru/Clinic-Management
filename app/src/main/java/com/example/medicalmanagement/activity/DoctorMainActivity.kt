@@ -155,10 +155,10 @@ lateinit var doctorDetails:DoctorRegisterTable
             if (result.size > 0) {
                 for (model in result) {
                     Log.e(TAG, " onBackPressed model " + model::class.java)
-                    if (model::class.java.equals(DoctorProfileFragment::class.java)) {
+                    if (model::class.java.equals(DoctorHomeFragment::class.java)) {
                         customdialog!!.showConfirmation()
                     }else if (model::class.java.equals(DoctorProfileFragment::class.java)) {
-                        setfragment(DoctorProfileFragment())
+                        setfragment(DoctorHomeFragment())
                     }else{
                         supportFragmentManager.popBackStackImmediate()
                     }
@@ -171,7 +171,7 @@ lateinit var doctorDetails:DoctorRegisterTable
         val mutableList: MutableList<Fragment> = ArrayList()
         for (number in list) {
             if (!number.toString().startsWith("SupportRequestManagerFragment") &&
-                    !number.toString().startsWith("FragmentDrawer")
+                    !number.toString().startsWith("DoctorFragmentDrawer")
             ) {
                 mutableList.add(number)
             }

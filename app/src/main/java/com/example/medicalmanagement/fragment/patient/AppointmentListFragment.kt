@@ -104,10 +104,10 @@ class AppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListAdapter
     }
 
     override fun onClickButtonInfo(position: Int, list: PatientAppointmentTable) {
-        addNewdialog()
+        addNewdialog(list)
     }
 
-    fun addNewdialog(){
+    fun addNewdialog(list: PatientAppointmentTable){
         val builder: Dialog = Dialog(activity!!)
         val inflater = layoutInflater
         builder.setTitle("With RatingBar")
@@ -115,6 +115,7 @@ class AppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListAdapter
         builder.setContentView(dialogLayout)
         val time = builder.findViewById<TextView>(R.id.time)
         val submit = builder.findViewById<TextView>(R.id.submit)
+        time.setText(list.suggestion)
         submit.setOnClickListener {
 
                 builder.dismiss()

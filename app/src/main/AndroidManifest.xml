@@ -18,10 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PacientLoginActivity"></activity>
+        <activity android:name=".fragment.admin.ChartActivity"></activity>
+        <activity android:name=".activity.PacientLoginActivity" />
         <activity android:name=".activity.DoctorLoginActivity" />
         <activity android:name=".activity.AdminLoginActivity" />
-        <activity android:name=".activity.AdminMainActivity"/>
+        <activity android:name=".activity.AdminMainActivity" />
 
         <meta-data
             android:name="android.support.FILE_PROVIDER_PATHS"
@@ -38,6 +39,7 @@
         <activity android:name=".activity.DoctorMainActivity" />
         <activity android:name=".activity.PatientRegisterActivity" />
         <activity android:name=".activity.PatientMainActivity" />
+        <activity android:name=".fragment.admin.chart.HalfPieChartActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -48,7 +50,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

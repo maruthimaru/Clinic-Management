@@ -58,6 +58,9 @@ public class SplashActivity extends AppCompatActivity {
                         != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_NETWORK_STATE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.SEND_SMS)
                         != PackageManager.PERMISSION_GRANTED
         ) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -65,7 +68,8 @@ public class SplashActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.INTERNET) && ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA) && ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_NETWORK_STATE)) {
+                    Manifest.permission.ACCESS_NETWORK_STATE)&& ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.SEND_SMS)) {
                 goNext();
             } else {
                 ActivityCompat.requestPermissions(this,
@@ -74,6 +78,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Manifest.permission.INTERNET,
                                 Manifest.permission.CAMERA
                                 , Manifest.permission.ACCESS_NETWORK_STATE
+                                , Manifest.permission.SEND_SMS
                         },
                         MY_PERMISSIONS_REQUEST_WRITE_FILES);
             }
@@ -134,7 +139,9 @@ public class SplashActivity extends AppCompatActivity {
         if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_FILES) {
             Log.e(TAG, "onRequestPermissionsResult: " + grantResults.length);
             int count = 0;
-
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                goNext();
+            }
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
             builder.setMessage("App required some permission please enable it")

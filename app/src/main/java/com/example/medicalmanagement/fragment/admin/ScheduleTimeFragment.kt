@@ -1,6 +1,7 @@
 package com.example.medicalmanagement.fragment.admin
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,6 +46,7 @@ class ScheduleTimeFragment : Fragment(), ScheduletimeAdapter.ListAdapterListener
 
         list = scheduleTimeDao.getTime() as MutableList<ScheduleTime>
         Log.e(TAG,"insertdataaaa " + scheduleTimeDao.getTime().size)
+
         setAdapter(list as ArrayList<ScheduleTime>)
 
         fab.setOnClickListener {
@@ -95,8 +97,17 @@ class ScheduleTimeFragment : Fragment(), ScheduletimeAdapter.ListAdapterListener
         }
     }
 
-    override fun onIemClick() {
-
+    override fun onIemClick(position: Int,model:ScheduleTime) {
+        AlertDialog.Builder(activity!!)
+                .setMessage("Are you sure want to delete?")
+                .setPositiveButton("yes",DialogInterface.OnClickListener { dialog, which ->
+                    scheduleTimeDao.delete(model)
+                    scheduletimeAdapter.removeItem(position)
+                    dialog.dismiss()
+                })
+                .setNegativeButton("No" , DialogInterface.OnClickListener { dialog, which ->
+                    dialog.dismiss()
+                }).show()
     }
 
 }

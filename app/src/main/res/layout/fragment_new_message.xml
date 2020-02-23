@@ -37,19 +37,14 @@
 
                 <TextView
                     android:id="@+id/time"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:minHeight="@dimen/size_100dp"
-                    android:layout_marginRight="@dimen/size_5dp"
                     android:background="@color/transparent"
-                    android:hint="No Msg received"
-                    android:paddingTop="@dimen/size_5dp"
-                    android:inputType="text"
-                    android:maxLength="@integer/int_20"
+                    android:layout_marginRight="@dimen/size_5dp"
                     android:paddingLeft="@dimen/size_12dp"
-                    android:singleLine="true"
                     android:textColor="@color/darkGray"
+                    android:hint="Suggestion/Reject reason"
+                    android:text="ssvvsavasvsvsdvasdvsvdssdsdvvsaddfgvdasfvsvsavvsv sd dssvsvsvsdvsdvsa ssvsvsvsvsd"
                     android:textSize="@dimen/size_12dp" />
 
                 <TextView

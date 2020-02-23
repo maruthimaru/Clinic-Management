@@ -24,8 +24,13 @@ class ScheduletimeAdapter(private val list:ArrayList<ScheduleTime>,private val c
 
     }
 
+    fun removeItem(position: Int){
+        list.removeAt(position)
+        notifyDataSetChanged()
+    }
+
     interface ListAdapterListener{
-        fun onIemClick()
+        fun onIemClick(position: Int,model:ScheduleTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,18 +47,9 @@ class ScheduletimeAdapter(private val list:ArrayList<ScheduleTime>,private val c
 
         holder.textViewTime.setText(model.timeing)
 
-//        holder.textViewTime.setOnClickListener {
-////            mListener.onIemClick()
-//            if (!clickStatus) {
-//                clickStatus = true
-//                holder.textViewTime.setBackgroundColor(context.resources.getColor(R.color.header_color))
-//                holder.textViewTime.setTextColor(context.resources.getColor(R.color.white))
-//            }else{
-//                clickStatus = false
-//                holder.textViewTime.setBackground(context.resources.getDrawable(R.drawable.borderblack))
-//                holder.textViewTime.setTextColor(context.resources.getColor(R.color.black))
-//            }
-//        }
+        holder.textViewTime.setOnClickListener {
+            mListener.onIemClick(position,model)
+        }
 
     }
 }

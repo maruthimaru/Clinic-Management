@@ -77,7 +77,7 @@
                 android:padding="@dimen/size_3dp"
                 android:background="@drawable/bordergray"
                 android:inputType="text"
-                android:text="fsdagasdgadsgfdfgadsgv"
+                android:text=""
                 android:hint="Enter specialist " />
 
         <TextView

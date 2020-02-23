@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
 import com.example.medicalmanagement.activity.AdminMainActivity
+import com.example.medicalmanagement.activity.DoctorMainActivity
 import com.example.medicalmanagement.activity.PatientMainActivity
 import com.example.medicalmanagement.activity.PatientRegisterActivity
 import com.example.medicalmanagement.adapter.AdminHomeAdapter
@@ -28,6 +29,7 @@ import java.util.ArrayList
 class DoctorHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
 
 
+    private val TAG: String=DoctorHomeFragment::class.java.simpleName
     private lateinit var doctorDetails: DoctorRegisterTable
     internal lateinit var view: View
     internal lateinit var list: MutableList<AdminHomeModel>
@@ -62,7 +64,7 @@ class DoctorHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
         recyclerView.layoutManager = lLayout
         homeAdapter = AdminHomeAdapter(list, activity!!, this@DoctorHomeFragment)
         recyclerView.adapter = homeAdapter
-        val activity = activity as PatientMainActivity?
+        val activity = activity as DoctorMainActivity?
 
         var actionBar: ActionBar? = null
         if (activity != null) {
@@ -88,6 +90,7 @@ class DoctorHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
             }
             1 -> {
 //                Toast.makeText(activity!!,"Add Appointment" ,Toast.LENGTH_SHORT).show()
+                Log.e(TAG,"doctorDetails + ${doctorDetails.name}")
                 setfragment(DoctorAppointmentListFragment(),doctorDetails)
             }
             2 -> {
@@ -110,7 +113,7 @@ class DoctorHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
 
     private fun setfragment(_fragment: Fragment,doctorList:DoctorRegisterTable) {
         var bundle =Bundle()
-        bundle.putSerializable(Constants.patientList,doctorList)
+        bundle.putSerializable(Constants.doctorList,doctorList)
         val fm = activity!!.supportFragmentManager
         _fragment.arguments=bundle
         val fragmentTransaction = fm!!.beginTransaction()

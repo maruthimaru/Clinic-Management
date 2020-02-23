@@ -7,8 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
-import android.nfc.Tag
 import android.os.Build
+import android.telephony.SmsManager
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -195,6 +195,15 @@ class CommonMethods{
                 .load(imageByteArray)
                 .placeholder(R.drawable.company_image)
                 .into(rowImageView);
+    }
+    fun sendSMS(phoneNo: String?, msg: String?) {
+        try {
+            val smsManager = SmsManager.getDefault()
+            smsManager.sendTextMessage(phoneNo, null, msg, null, null)
+        } catch (ex: java.lang.Exception) {
+            Log.e(TAG,"sms error : "+ex.localizedMessage)
+            ex.printStackTrace()
+        }
     }
 
 }

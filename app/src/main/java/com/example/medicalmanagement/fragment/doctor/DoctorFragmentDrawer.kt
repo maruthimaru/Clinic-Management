@@ -93,7 +93,7 @@ class DoctorFragmentDrawer : Fragment() {
                                 when(i){
                                     0->{
                                         var doctorDetails=doctorRegisterDao.login(doctorDetails.email!!,doctorDetails.password!!)
-                                        setfragment(DoctorProfileFragment(),doctorDetails)
+                                        setfragment(DoctorHomeFragment(),doctorDetails)
                                     }
                                     1->{
                                         commonClass.Logoutscreen()

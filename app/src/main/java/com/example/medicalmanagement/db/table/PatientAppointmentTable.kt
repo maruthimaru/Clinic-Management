@@ -55,6 +55,13 @@ class PatientAppointmentTable: Serializable{
     @Expose
     var date: String? = null
 
+    @SerializedName("suggestion")
+    @Expose
+    var suggestion: String? = null
+
+    @SerializedName("rejected")
+    @Expose
+    var isRejects: Boolean = false
 
     @TypeConverters(DoctorRegDataConversion::class)
     @SerializedName("time")

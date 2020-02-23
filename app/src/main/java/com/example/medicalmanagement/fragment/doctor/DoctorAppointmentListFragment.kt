@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,7 @@ import com.example.medicalmanagement.helper.Constants
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DoctorAppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListAdapterListener {
-    private lateinit var patientDetails: PatientRegisterTable
+    private lateinit var patientDetails: DoctorRegisterTable
     var TAG = DoctorAppointmentListFragment::class.java.simpleName.toString()
     lateinit var fab: FloatingActionButton
     internal lateinit var recycleview: RecyclerView
@@ -37,6 +38,8 @@ class DoctorAppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListA
     lateinit var appDatabase: AppDatabase
     lateinit var patientAppointmentDao: PatientAppointmentDao
     lateinit var doctorRegisterAdapter: PatientAppointmentAdapter
+    lateinit var commonMethods: CommonMethods
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return  inflater.inflate(R.layout.fragment_doctor_details, container, false)
     }
@@ -46,6 +49,7 @@ class DoctorAppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListA
         super.onViewCreated(view, savedInstanceState)
         fab = view.findViewById(R.id.fab)
         recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
+        commonMethods= CommonMethods(activity!!)
         appDatabase = AppDatabase.getDatabase(activity!!)
         patientAppointmentDao=appDatabase.patientAppointmentDao()
         list=ArrayList()
@@ -54,7 +58,7 @@ class DoctorAppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListA
 
         var bundle =arguments
         if (bundle!=null){
-            patientDetails= bundle.getSerializable(Constants.patientList) as PatientRegisterTable
+            patientDetails= bundle.getSerializable(Constants.doctorList) as DoctorRegisterTable
 //            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
 //            commonMethods.loadImage(image,companyimage)
         }
@@ -78,7 +82,7 @@ class DoctorAppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListA
 
     private fun setfragment(_fragment: Fragment,doctorList: PatientRegisterTable) {
         var bundle =Bundle()
-        bundle.putSerializable(Constants.patientList,doctorList)
+        bundle.putSerializable(Constants.doctorList,doctorList)
         val fm = activity!!.supportFragmentManager
         _fragment.arguments=bundle
         val fragmentTransaction = fm!!.beginTransaction()
@@ -101,20 +105,55 @@ class DoctorAppointmentListFragment : Fragment(),PatientAppointmentAdapter.ListA
     }
 
     override fun onClickButtonInfo(position: Int, list: PatientAppointmentTable) {
-        addNewdialog()
+        addNewdialog(list)
     }
 
-    fun addNewdialog(){
+    fun addNewdialog(list: PatientAppointmentTable){
         val builder: Dialog = Dialog(activity!!)
         val inflater = layoutInflater
         builder.setTitle("With RatingBar")
-        val dialogLayout: View = inflater.inflate(R.layout.fragment_new_message, null)
+        val dialogLayout: View = inflater.inflate(R.layout.fragment_inform_message, null)
         builder.setContentView(dialogLayout)
-        val time = builder.findViewById<TextView>(R.id.time)
+        val time = builder.findViewById<EditText>(R.id.time)
         val submit = builder.findViewById<TextView>(R.id.submit)
+        val reject = builder.findViewById<TextView>(R.id.reject)
+        val approve = builder.findViewById<TextView>(R.id.approve)
         submit.setOnClickListener {
 
+            val textString=time.text.toString()
+            if (textString.length>0){
+                time.setError(null)
+                list.suggestion=textString
+                patientAppointmentDao.update(list)
+                commonMethods.sendSMS(list.phone,textString)
                 builder.dismiss()
+            }else{
+                time.setError("Give a suggestion")
+                time.requestFocus()
+            }
+
+        }
+
+        reject.setOnClickListener {
+
+            val textString=time.text.toString()
+            if (textString.length>0){
+                time.setError(null)
+                list.suggestion=textString
+                list.isRejects=true
+                patientAppointmentDao.update(list)
+                commonMethods.sendSMS(list.phone,textString)
+                builder.dismiss()
+            }else{
+                time.setError("Give a Reaject reason")
+                time.requestFocus()
+            }
+
+        }
+
+        approve.setOnClickListener {
+            commonMethods.sendSMS(list.phone,"Your appointment has accepted on ${list.date +" " + list.time}")
+            builder.dismiss()
 
         }
 
