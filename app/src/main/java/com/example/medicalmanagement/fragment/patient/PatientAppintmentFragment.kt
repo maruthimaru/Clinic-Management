@@ -288,7 +288,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
             val appointmentList = ArrayList<PatientAppointmentTable>()
             appointmentList.add(PatientAppointmentTable(patientDetails.name, imagelist, patientDetails.phone, patientDetails.age, patientDetails.email,
                     selectedNamelist.id!!.toString(), selectedNamelist.name, selectedNamelist.specialist, Doctornumber, timing))
-
+            commonMethods.sendSMS(selectedNamelist.phone,Special)
             Log.e("TAG", " doctorregister  " + list.size)
             Toast.makeText(activity!!, "Register successfully", Toast.LENGTH_SHORT).show()
             patientAppointmentDao.insert(appointmentList)
