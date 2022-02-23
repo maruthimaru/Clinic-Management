@@ -46,10 +46,10 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
         commonMethods= CommonMethods(activity!!)
 //        list.add(AdminHomeModel(R.drawable.ic_logo, getString(R.string.mydetails)))
 //        list.add(AdminHomeModel(R.drawable.ic_viewbook, getString(R.string.view_book)))
-
+        list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.add_hospital)))
+        list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.timimg)))
         list.add(AdminHomeModel(R.drawable.ic_search_doctor, getString(R.string.add_doctor)))
         list.add(AdminHomeModel(R.drawable.ic_book_appiontment, getString(R.string.appointment)))
-        list.add(AdminHomeModel(R.drawable.ic_feedback, getString(R.string.timimg)))
         list.add(AdminHomeModel(R.drawable.graph, getString(R.string.graph)))
         list.add(AdminHomeModel(R.drawable.ic_logout, getString(R.string.logout)))
 
@@ -73,29 +73,26 @@ class AdminHomeFragment : Fragment(),AdminHomeAdapter.ListAdapterListener {
     override fun onClickButton(position: Int) {
         Log.e(ContentValues.TAG, "onClickButton: $position")
         when (position) {
-
             0 -> {
-            setfragment(DoctorFragment())
+                setfragment(HospitalFragment())
             }
             1 -> {
-                setfragment(AllAppointmentListFragment())
+                setfragment(ScheduleTimeFragment())
             }
             2 -> {
-                setfragment(ScheduleTimeFragment())
-
+                setfragment(DoctorFragment())
             }
             3 -> {
+                setfragment(AllAppointmentListFragment())
+            }
+            4 -> {
 //                setfragment(Graph())
                 startActivity(Intent(activity!!,HalfPieChartActivity::class.java))
             }
-            4 -> {
+            5 -> {
                 commonMethods.Logoutscreen()
             }
-            5 -> {
-            }
-            6 -> {
 
-            }
         }
 
 

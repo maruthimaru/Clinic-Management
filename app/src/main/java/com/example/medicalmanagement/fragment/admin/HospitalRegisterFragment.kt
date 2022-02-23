@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
-import com.example.medicalmanagement.adapter.HospitalRegisterAdapter
-import com.example.medicalmanagement.adapter.HospitalSpinnerAdapter
 import com.example.medicalmanagement.adapter.ScheduleDoctortimeAdapter
 import com.example.medicalmanagement.adapter.ScheduletimeAdapter
 import com.example.medicalmanagement.db.AppDatabase
@@ -40,10 +38,10 @@ import java.io.FileReader
 import java.io.IOException
 
 
-class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapterListener {
+class HospitalRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapterListener {
     private lateinit var scheduletimeAdapter: ScheduleDoctortimeAdapter
-    private val TAG: String=DoctorRegisterFragment::class.java.simpleName
-    internal var list=ArrayList<DoctorRegisterTable>()
+    private val TAG: String=HospitalRegisterFragment::class.java.simpleName
+    internal var list=ArrayList<HospitalRegisterTable>()
     internal  var timeList=ArrayList<ScheduleTime>()
     private var phtobitmap: Bitmap?=null
     lateinit var companyimage: ImageView
@@ -56,64 +54,34 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
     lateinit var specialist:EditText
     lateinit var doctortime:EditText
     lateinit var password:EditText
-    lateinit var select_hospital:Spinner
     lateinit var appDatabase: AppDatabase
-    lateinit var doctorRegisterDao: DoctorRegisterDao
-    lateinit var hospitalRegisterDao: HospitalRegisterDao
+    lateinit var doctorRegisterDao: HospitalRegisterDao
     lateinit var bitmapUtility:BitmapUtility
     internal lateinit var commonMethods: CommonMethods
-    internal lateinit var recycleview: RecyclerView
     lateinit var scheduleTimeDao: ScheduleTimeDao
-    lateinit var hospital_list: MutableList<HospitalRegisterTable>
     val requestcode = 3
-     var selectedItem = ""
     var docPaths=ArrayList<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return  inflater.inflate(R.layout.fragment_doctor_register_, container, false)
+        return  inflater.inflate(R.layout.fragment_hospital_register_, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         companyimage=view.findViewById(R.id.companyImg)
         companyphotoeditbtn=view.findViewById(R.id.imageButton2)
-        doctorname=view.findViewById(R.id.doctorname)
+        doctorname=view.findViewById(R.id.hospitalname)
         submit_btn = view.findViewById(R.id.submit_btn)
-        doctornumber=view.findViewById(R.id.doctornumber)
-        doctoremail=view.findViewById(R.id.doctoremail)
-        specialist=view.findViewById(R.id.specialist)
-        doctortime=view.findViewById(R.id.doctortime)
-        password=view.findViewById(R.id.password)
+        doctornumber=view.findViewById(R.id.hospitalnumber)
+        doctoremail=view.findViewById(R.id.hospitalemail)
         upload_btn=view.findViewById(R.id.upload_btn)
-        select_hospital = view.findViewById(R.id.selectHospital)
-        recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
         appDatabase = AppDatabase.getDatabase(activity!!)
         bitmapUtility= BitmapUtility(activity!!)
         commonMethods=CommonMethods(activity!!)
-        doctorRegisterDao=appDatabase.doctorregisterdao()
+        doctorRegisterDao=appDatabase.hospitalregisterdao()
         scheduleTimeDao=appDatabase.schudleTimeDao()
-        hospitalRegisterDao = appDatabase.hospitalregisterdao()
         submit_btn.setOnClickListener { askAppointment() }
 
-        recycleview.setHasFixedSize(true)
-        recycleview.layoutManager = GridLayoutManager(activity,4)
-
-        hospital_list = hospitalRegisterDao.getall() as MutableList<HospitalRegisterTable>
-        var spinnerAdapter= HospitalSpinnerAdapter(activity!!, android.R.layout.simple_spinner_item,hospital_list)
-        select_hospital.adapter=spinnerAdapter
-
-        select_hospital.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                 selectedItem = hospital_list[p2].id.toString()
-                Log.e(TAG, "onItemSelected: "+hospital_list[p2].id )
-
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
 
         upload_btn.setOnClickListener {
 //            val fileintent = Intent(Intent.ACTION_GET_CONTENT)
@@ -174,66 +142,43 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
 
     //set adapter
     private fun setAdapter(list: ArrayList<ScheduleTime>) {
-        scheduletimeAdapter = ScheduleDoctortimeAdapter(list,activity!!,this)
-        if (list.size > 0) {
-            recycleview.adapter = scheduletimeAdapter
-        }
+
     }
 
     private fun askAppointment(){
         val Doctorname=doctorname.text.toString()
         val Doctornumber=doctornumber.text.toString()
         val Doctoremail=doctoremail.text.toString()
-        val Special=specialist.text.toString()
-        val Doctortime=doctortime.text.toString()
-        val Pass=password.text.toString()
+
         var logo = ""
 
-        val timing=scheduletimeAdapter.getClickedStatus()
 
-        Log.e(TAG," timing "+ timing)
-
-        if(selectedItem==""){
-         Toast.makeText(activity, "Select the hospital",Toast.LENGTH_SHORT).show()
-        }
-        else if (Doctorname.isNullOrEmpty()){
+        if (Doctorname.isNullOrEmpty()){
             doctorname.requestFocus()
-            doctorname.error = "Please enter the doctor name"
+            doctorname.error = "Please enter the hospital name"
         }
         else if (Doctornumber.isNullOrEmpty()){
             doctornumber.requestFocus()
-            doctornumber.error = "Please enter the doctor number"
+            doctornumber.error = "Please enter the hospital number"
         }
         else if (Doctoremail.isNullOrEmpty()){
             doctoremail.requestFocus()
-            doctoremail.error = "Please enter the doctor email"
+            doctoremail.error = "Please enter the hospital email"
         }
-        else if (Special.isNullOrEmpty()){
-            specialist.requestFocus()
-            specialist.error = "Please enter the specialist"
-        }
-        else if (timing.size<=0){
-//            doctortime.requestFocus()
-//            doctortime.error = "Please select the doctor time"
-            Toast.makeText(activity!!,"Please select the doctor time",Toast.LENGTH_SHORT).show()
-        }
-        else if (Pass.isNullOrEmpty()){
-            password.requestFocus()
-            password.error = "Please enter the password"
-        }else{
+       else{
             if (phtobitmap != null) {
                 logo = bitmapUtility.getStringImage(phtobitmap!!)
             } else {
                 logo = commonMethods.getBaseImage(commonMethods.getBytes((companyimage.drawable as BitmapDrawable).bitmap))
             }
 
-            list.add(DoctorRegisterTable(Doctorname,Doctornumber,logo,Doctoremail,Special, timing,Pass, selectedItem))
+            list.add(HospitalRegisterTable(Doctorname,Doctornumber,logo,Doctoremail))
             Log.e("TAG", " doctorregister  " + list.size)
             Toast.makeText(activity!!,"Register successfully",Toast.LENGTH_SHORT).show()
             doctorRegisterDao.insert(list)
             Log.e(TAG,"insertdata " + doctorRegisterDao.getall().size)
 //            list = doctorRegisterDao.getall() as MutableList<DoctorRegisterTable>
-            setfragment(DoctorFragment())
+            setfragment(HospitalFragment())
         }
 
     }
@@ -344,7 +289,7 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
                                     if (str.size > 0) {
                                     Log.e(TAG,"list : " +strTime)
 //                                        val timing = DoctorRegDataConversion().toOptionValuesList(str[6])
-                                        list.add(DoctorRegisterTable(str[1], str[2], str[3], str[4], str[5], strTime, str[7], selectedItem))
+                                        list.add(HospitalRegisterTable(str[1], str[2], str[3], str[4]))
                                     }
                                 }
                                 Log.e(TAG, "List size demo")

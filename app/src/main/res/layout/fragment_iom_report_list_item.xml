@@ -117,7 +117,7 @@
                 style="@style/TextViewww"
                 android:layout_below="@+id/view"
                 android:layout_marginTop="@dimen/size_2dp"
-                android:text="specialist" />
+                android:text="" />
             <TextView
                 android:id="@+id/doctortime"
                 style="@style/TextViewww"
@@ -125,7 +125,7 @@
                 android:layout_below="@+id/view"
                 android:layout_marginTop="@dimen/size_2dp"
                 android:background="@color/colorPrimary"
-                android:text="time"
+                android:text=""
                 android:paddingRight="@dimen/size_5dp"
 
                 android:paddingLeft="@dimen/size_5dp"

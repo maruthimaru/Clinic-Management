@@ -6,15 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.medicalmanagement.db.dao.*
-import com.example.medicalmanagement.db.table.DoctorRegisterTable
-import com.example.medicalmanagement.db.table.PatientAppointmentTable
-import com.example.medicalmanagement.db.table.PatientRegisterTable
-import com.example.medicalmanagement.db.table.ScheduleTime
+import com.example.medicalmanagement.db.table.*
 
 
 @Database(
-        entities = [DoctorRegisterTable::class,PatientRegisterTable::class,ScheduleTime::class,PatientAppointmentTable::class],version = 12)
+        entities = [DoctorRegisterTable::class,PatientRegisterTable::class,ScheduleTime::class,PatientAppointmentTable::class, HospitalRegisterTable::class],version = 13)
 abstract class AppDatabase:RoomDatabase(){
+    abstract fun hospitalregisterdao(): HospitalRegisterDao
     abstract fun doctorregisterdao(): DoctorRegisterDao
     abstract fun patientRegisterDao():PatientRegisterDao
     abstract fun schudleTimeDao():ScheduleTimeDao

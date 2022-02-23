@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Medical management</string>
     <string name="welcome">Welcome</string>
-    <string name="choose_your_login">Choose Your Login</string>
+    <string name="choose_your_login">Who you are?</string>
     <string name="admin">Admin</string>
     <string name="doctor">Doctor</string>
     <string name="pacient">Patient</string>
@@ -25,6 +25,7 @@
     <string name="appointment">Appointment</string>
     <string name="sureDelete">Are you sure want to delete?</string>
     <string name="timimg">Timing</string>
+    <string name="add_hospital">Add Hospital</string>
     <string name="graph">Graph</string>
 
 

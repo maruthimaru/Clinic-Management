@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#8642a3</color>
-    <color name="co">#8642a3</color>
-    <color name="colorPrimaryDark">#8642a3</color>
+    <color name="colorPrimary">#fff000</color>
+    <color name="co">#fff000</color>
+    <color name="colorPrimaryDark">#fff000</color>
     <color name="colorAccent">#D81B60</color>
     <color name="blue">#337ab7</color>
     <color name="yelloGreen">#bee7a4</color>
@@ -122,7 +122,7 @@
     <color name="maincolor">#589B43</color>
     <color name="view">#CB8FE7</color>
     <color name="View">#e0e0e0</color>
-    <color name="header_color">#8642a3</color>
+    <color name="header_color">#fff000</color>
     <color name="nav_menu_color">#8c639c</color>
     <color name="material_blue_grey_80">#ff37474f</color>
     <color name="material_blue_grey_800">#ff37474f</color>

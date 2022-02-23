@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,16 +23,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.medicalmanagement.R
-import com.example.medicalmanagement.adapter.DoctorNameAdapter
-import com.example.medicalmanagement.adapter.DoctorSpecialistAdapter
-import com.example.medicalmanagement.adapter.ScheduleDoctortimeAdapter
-import com.example.medicalmanagement.adapter.SchedulePatienttimeAdapter
+import com.example.medicalmanagement.adapter.*
 import com.example.medicalmanagement.db.AppDatabase
 import com.example.medicalmanagement.db.dao.*
-import com.example.medicalmanagement.db.table.DoctorRegisterTable
-import com.example.medicalmanagement.db.table.PatientAppointmentTable
-import com.example.medicalmanagement.db.table.PatientRegisterTable
-import com.example.medicalmanagement.db.table.ScheduleTime
+import com.example.medicalmanagement.db.table.*
 import com.example.medicalmanagement.helper.BitmapUtility
 import com.example.medicalmanagement.helper.CommonMethods
 import com.example.medicalmanagement.helper.Constants
@@ -43,7 +36,6 @@ import com.example.medicalmanagement.helper.pojo.ImagesModel
 import droidninja.filepicker.FilePickerConst
 import droidninja.filepicker.FilePickerConst.KEY_SELECTED_DOCS
 import id.zelory.compressor.Compressor
-import kotlinx.android.synthetic.main.fragment_iom_report_list_item.*
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,12 +59,14 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
     lateinit var search_btn: Button
     lateinit var doctoremail: TextView
     lateinit var specialist: EditText
+    lateinit var select_hospital:Spinner
     lateinit var password: AutoCompleteTextView
     lateinit var appDatabase: AppDatabase
     lateinit var patientRegisterDao: PatientRegisterDao
     lateinit var patientAppointmentDao: PatientAppointmentDao
     lateinit var doctorRegisterDao: DoctorRegisterDao
     lateinit var scheduleTimeDao: ScheduleTimeDao
+    lateinit var hospitalRegisterDao: HospitalRegisterDao
     lateinit var bitmapUtility: BitmapUtility
     internal lateinit var commonMethods: CommonMethods
     val requestcode = 3
@@ -86,6 +80,8 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
     lateinit var docpic: TextView
     lateinit var recyclerView_doc_img: RecyclerView
     private var compressedImage: File? = null
+    var selectedItem = ""
+    lateinit var hospital_list: MutableList<HospitalRegisterTable>
 
     var docPaths = ArrayList<String>()
     internal lateinit var recycleview: RecyclerView
@@ -105,6 +101,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
         doctoremail = view.findViewById(R.id.doctoremail)
         specialist = view.findViewById(R.id.specialist)
         password = view.findViewById(R.id.password)
+        select_hospital = view.findViewById(R.id.selectHospital)
         recycleview = view.findViewById<View>(R.id.recyclerView) as RecyclerView
         recyclerView_doc_img = view.findViewById(R.id.recyclerView_doc_img)
         docpic = view.findViewById(R.id.docpic)
@@ -114,6 +111,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
         patientRegisterDao = appDatabase.patientRegisterDao()
         doctorRegisterDao = appDatabase.doctorregisterdao()
         scheduleTimeDao = appDatabase.schudleTimeDao()
+        hospitalRegisterDao = appDatabase.hospitalregisterdao()
         patientAppointmentDao = appDatabase.patientAppointmentDao()
         recycleview.setHasFixedSize(true)
         recycleview.layoutManager = GridLayoutManager(activity, 4)
@@ -122,25 +120,48 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
         doctornumber.setOnClickListener {
             commonMethods.clickDate(doctornumber)
         }
-        var doctorList = doctorRegisterDao.getSpecialist() as ArrayList
-        val hashSet = HashSet(doctorList);
-        Log.e(TAG, " hasset " + hashSet.size)
-        doctorList.clear()
-        doctorList = ArrayList<String>(hashSet)
-        val specialistAdapter = DoctorSpecialistAdapter(activity!!, 0, 0, doctorList, this)
-        password.setAdapter(specialistAdapter)
-        password.threshold = 1
+//        var doctorList = doctorRegisterDao.getSpecialist() as ArrayList
+//        val hashSet = HashSet(doctorList);
+//        Log.e(TAG, " hasset " + hashSet.size)
+//        doctorList.clear()
+//        doctorList = ArrayList<String>(hashSet)
+//        val specialistAdapter = DoctorSpecialistAdapter(activity!!, 0, 0, doctorList, this)
+//        password.setAdapter(specialistAdapter)
+//        password.threshold = 1
         var bundle = arguments
         if (bundle != null) {
             patientDetails = bundle.getSerializable(Constants.patientList) as PatientRegisterTable
 //            var image= Base64.decode(patientDetails.image, Base64.DEFAULT);
 //            commonMethods.loadImage(image,companyimage)
         }
+        hospital_list = hospitalRegisterDao.getall() as MutableList<HospitalRegisterTable>
+        var spinnerAdapter= HospitalSpinnerAdapter(activity!!, android.R.layout.simple_spinner_item,hospital_list)
+        select_hospital.adapter=spinnerAdapter
+
+        select_hospital.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                selectedItem = hospital_list[p2].id.toString()
+                Log.e(TAG, "onItemSelected: "+hospital_list[p2].id )
+                var doctorList = doctorRegisterDao.getSpecialist(selectedItem) as ArrayList
+                val hashSet = HashSet(doctorList);
+                Log.e(TAG, " hasset " + hashSet.size)
+                doctorList.clear()
+                doctorList = ArrayList<String>(hashSet)
+                val specialistAdapter = DoctorSpecialistAdapter(activity!!, 0, 0, doctorList, this@PatientAppintmentFragment)
+                password.setAdapter(specialistAdapter)
+                password.threshold = 1
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
 
         password.setOnItemClickListener { parent, view, position, id ->
             val selectedSpecialist = parent!!.adapter.getItem(position) as String
             Log.e(TAG, "specialist name : " + selectedSpecialist)
-            val doctorSpecialistList = doctorRegisterDao.getSpecialist(selectedSpecialist!!)
+            val doctorSpecialistList = doctorRegisterDao.getSpecialistDoctor(selectedSpecialist!!,selectedItem)
             Log.e(TAG, "doctorSpecialistList " + doctorSpecialistList.size)
             val nameAdapter = DoctorNameAdapter(activity!!, 0, 0, doctorSpecialistList, this)
             doctorname.setAdapter(nameAdapter)
@@ -176,7 +197,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
                     1 // Select Photo
                     -> {
                         val pickPhoto = Intent(Intent.ACTION_PICK,
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         startActivityForResult(pickPhoto, 1)//one can be replaced with any action code
                         Log.e("TAG", "Click event for photo=$which")
                     }
@@ -287,7 +308,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
         } else {
             val appointmentList = ArrayList<PatientAppointmentTable>()
             appointmentList.add(PatientAppointmentTable(patientDetails.name, imagelist, patientDetails.phone, patientDetails.age, patientDetails.email,
-                    selectedNamelist.id!!.toString(), selectedNamelist.name, selectedNamelist.specialist, Doctornumber, timing))
+                selectedNamelist.id!!.toString(), selectedNamelist.name, selectedNamelist.specialist, Doctornumber, timing))
             commonMethods.sendSMS(selectedNamelist.phone,Special)
             Log.e("TAG", " doctorregister  " + list.size)
             Toast.makeText(activity!!, "Register successfully", Toast.LENGTH_SHORT).show()
@@ -621,3 +642,4 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
 
     }
 }
+

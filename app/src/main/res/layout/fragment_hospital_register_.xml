@@ -38,11 +38,6 @@
             android:layout_below="@+id/imageButton2"
             tools:ignore="UnknownId">
 
-            <Spinner
-                android:id="@+id/selectHospital"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
         <TextView
             android:id="@+id/companytextView"
             android:layout_width="match_parent"
@@ -52,9 +47,9 @@
             android:textSize="@dimen/size_14dp"
             android:textStyle="bold"
             android:layout_marginTop="@dimen/size_20dp"
-            android:text="Enter doctor name" />
+            android:text="Enter hospital name" />
         <EditText
-            android:id="@+id/doctorname"
+            android:id="@+id/hospitalname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_14dp"
@@ -62,7 +57,7 @@
             android:padding="@dimen/size_3dp"
             android:background="@drawable/bordergray"
             android:inputType="textPersonName"
-            android:hint="Enter doctor name" />
+            android:hint="Enter hospital name" />
         <TextView
             android:id="@+id/doctor"
             android:layout_width="match_parent"
@@ -71,9 +66,9 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/size_14dp"
             android:textStyle="bold"
-            android:text="Enter doctor number" />
+            android:text="Enter hospital number" />
         <EditText
-            android:id="@+id/doctornumber"
+            android:id="@+id/hospitalnumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_14dp"
@@ -90,35 +85,17 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/size_14dp"
             android:textStyle="bold"
-            android:text="Enter doctor email" />
+            android:text="Enter hospital email" />
         <EditText
-            android:id="@+id/doctoremail"
+            android:id="@+id/hospitalemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_14dp"
             android:padding="@dimen/size_3dp"
             android:background="@drawable/bordergray"
             android:inputType="textPersonName"
-            android:hint="Enter doctor email" />
-        <TextView
-            android:id="@+id/companyaddresstextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_3dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/size_14dp"
-            android:textStyle="bold"
-            android:text="Enter specialist" />
-        <EditText
-            android:id="@+id/specialist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="@integer/int_200"
-            android:textSize="@dimen/size_14dp"
-            android:padding="@dimen/size_3dp"
-            android:background="@drawable/bordergray"
-            android:inputType="textPostalAddress"
-            android:hint="Enter specialist" />
+            android:hint="Enter hospital email" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,54 +124,6 @@
                 android:text="choosefile" />
         </RelativeLayout>
 
-        <EditText
-            android:id="@+id/doctortime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/size_14dp"
-            android:padding="@dimen/size_3dp"
-            android:visibility="gone"
-            android:background="@drawable/bordergray"
-            android:inputType="textAutoComplete"
-            android:hint="Enter doctor time"/>
-        <TextView
-            android:id="@+id/finacialyeartotextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_3dp"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:text="Enter password"
-            android:textSize="@dimen/size_14dp"/>
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bordergray"
-                android:hint="Enter password"
-                android:inputType="date"
-                android:maxLength="@integer/int_10"
-                android:padding="@dimen/size_3dp"
-                android:textSize="@dimen/size_14dp" />
-
-            <TextView
-                android:id="@+id/finacialyearformtextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/size_3dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/size_14dp"
-                android:textStyle="bold"
-                android:text="Select doctor time" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/size_2dp"
-                android:layout_marginTop="@dimen/size_2dp"
-                android:layout_marginRight="@dimen/size_2dp"/>
 
             <LinearLayout
             android:layout_width="match_parent"
@@ -228,9 +157,9 @@
                 android:textSize="@dimen/size_14dp"
                 android:textStyle="bold"
                 android:layout_marginLeft="@dimen/size_10dp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
-        </LinearLayout>
+            </LinearLayout>
 
 
     </LinearLayout>

@@ -6,6 +6,6 @@
     android:layout_height="@dimen/size_70dp"
 
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/purple"
+    android:background="@color/header_color"
     local:titleTextColor="@color/white"
     local:subtitleTextColor="@color/white"/>

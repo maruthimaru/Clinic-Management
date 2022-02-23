@@ -7,8 +7,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-@Entity(tableName = "doctor_register_table")
-class DoctorRegisterTable: Serializable{
+@Entity(tableName = "hospital_register_table")
+class HospitalRegisterTable: Serializable{
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -16,11 +16,6 @@ class DoctorRegisterTable: Serializable{
     @ColumnInfo(name = "id")
     @Expose
     var id:Int?=null
-
-    @SerializedName("hospital_id")
-    @ColumnInfo(name = "hospital_id")
-    @Expose
-    var hospitalId: String? = null
 
     @SerializedName("name")
     @ColumnInfo(name = "name")
@@ -42,30 +37,10 @@ class DoctorRegisterTable: Serializable{
     @Expose
     var email: String? = null
 
-    @SerializedName("specialist")
-    @ColumnInfo(name = "specialist")
-    @Expose
-    var specialist: String? = null
-
-    @TypeConverters(DoctorRegDataConversion::class)
-    @SerializedName("time")
-    @ColumnInfo(name = "time")
-    var time: List<String?>? = null
-
-    @SerializedName("password")
-    @ColumnInfo(name = "password")
-    @Expose
-    var password: String? = null
-
-
-    constructor(name: String?, phone: String?, image: String?, email: String?, specialist: String?, time: List<String?>?, password: String?, hospitalId:String) {
+    constructor(name: String?, phone: String?, image: String?, email: String?) {
         this.name = name
         this.phone = phone
         this.image = image
         this.email = email
-        this.specialist = specialist
-        this.time = time
-        this.password = password
-        this.hospitalId = hospitalId
     }
 }

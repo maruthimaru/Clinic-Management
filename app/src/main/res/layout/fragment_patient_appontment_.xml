@@ -60,6 +60,11 @@
                 android:inputType="phone"
                 android:hint="Enter Data" />
 
+            <Spinner
+                android:id="@+id/selectHospital"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <TextView
                 android:id="@+id/finacialyeartotextView"
                 android:layout_width="match_parent"

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     android:background="@color/header_color"
     tools:context=".activity.SplashActivity"
     tools:ignore="MissingDefaultResource">
@@ -13,18 +15,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_hospital"
+        android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/companyLogo"
-    android:layout_centerHorizontal="true"
-    android:text="@string/welcome"
-    android:layout_marginTop="@dimen/size_10dp"
-    android:textStyle="bold"
-    android:textColor="@color/white"
-    android:textSize="@dimen/size_16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="@dimen/size_200dp"
+        android:layout_centerHorizontal="true"
+        android:text="Get An Appointment from the doctor from your home"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_20dp"/>
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome You"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_25dp"/>
+
+</LinearLayout>
