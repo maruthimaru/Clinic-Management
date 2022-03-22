@@ -449,7 +449,7 @@ class PatientAppintmentFragment : Fragment(), DoctorSpecialistAdapter.ItemSelect
 
                 if (resultCode === Activity.RESULT_OK && attr.data != null) {
                     docPaths = ArrayList()
-                    docPaths.addAll(data!!.getStringArrayListExtra(KEY_SELECTED_DOCS))
+                    docPaths.addAll(data!!.getStringArrayListExtra(KEY_SELECTED_DOCS)!!)
                 }
 
 //

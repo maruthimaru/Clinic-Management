@@ -286,7 +286,7 @@ class DoctorRegisterFragment : Fragment(), ScheduleDoctortimeAdapter.ListAdapter
 
                 if (resultCode === Activity.RESULT_OK && attr.data != null) {
                     docPaths = ArrayList()
-                    docPaths.addAll(data!!.getStringArrayListExtra(KEY_SELECTED_DOCS))
+                    docPaths.addAll(data!!.getStringArrayListExtra(KEY_SELECTED_DOCS)!!)
                 }
 
 //
